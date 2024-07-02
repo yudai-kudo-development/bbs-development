@@ -1,0 +1,44 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>みんなのおもしろ選手権</title>
+        <meta name="description" content="競え！">
+        <link rel="stylesheet" href="../css/style.css">
+    </head>
+    <body>
+        <header>
+            <h1>みんなのおもしろ選手権</h1>
+            <h2>~闘争心を示せ~</h2>
+            <p>闘争心の闘争心による闘争心のための熱き頂上決戦</p>
+            <nav id="menu-navi">
+                <ul class="inline-block button">
+                    <li><a href="./index.php">トップ</a></li>
+                    <li><a href="./newcontest.php">選手権を開催 する</a></li>
+                    <li><a href="//">選手 権を探す</a></li>
+                    <!---searchcontest.phpのフィルターで新着を選択した状態に遷移--->
+                    <li><a href="//">新着</a></li>
+                    <!---searchcontest.phpのフィルターでランキングを選択した状態で遷移--->
+                    <li><a href="//">ラン キング</a></li>
+                    <li><a href="//">お知らせ</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div id="container">
+            {{template "content" . }}
+        </div>
+        <footer>
+            <div id="footer_navi">
+                <ul class="inline-block button">
+                    <li><a href="//">利用規約</li>
+                    <li><a href="//">プライバシ ーポリシー</li>
+                    <li><a href="//">お問い合わ せ</li>
+                </ul>
+            </div>
+        </footer>
+        <script src="./js/index.js"></script>
+    </body>
+</html>
+{{end}}

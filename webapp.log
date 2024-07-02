@@ -1,0 +1,176 @@
+2024/07/02 09:17:47 server.go:3413: http: panic serving 127.0.0.1:62374: template: layout.html:19: function "url" not defined
+goroutine 18 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1898 +0xbe
+panic({0x657d40?, 0xc00008c140?})
+	C:/Program Files/Go/src/runtime/panic.go:770 +0x132
+html/template.Must(...)
+	C:/Program Files/Go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x757530, 0xc0000ac0e0}, {0x644aa0, 0x7533c0}, {0xc000027ab8?, 0xc00009e008?, 0xc000027aa0?})
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/server.go:19 +0x23a
+bbs-development/app/controllers.top({0x757530?, 0xc0000ac0e0?}, 0xc000027b30?)
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/route_main.go:13 +0x6f
+net/http.HandlerFunc.ServeHTTP(0x9b4140?, {0x757530?, 0xc0000ac0e0?}, 0x59b1da?)
+	C:/Program Files/Go/src/net/http/server.go:2166 +0x29
+net/http.(*ServeMux).ServeHTTP(0x359139?, {0x757530, 0xc0000ac0e0}, 0xc0000aa000)
+	C:/Program Files/Go/src/net/http/server.go:2683 +0x1ad
+net/http.serverHandler.ServeHTTP({0xc000088210?}, {0x757530?, 0xc0000ac0e0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:3137 +0x8e
+net/http.(*conn).serve(0xc0000a0000, {0x757c20, 0xc000088120})
+	C:/Program Files/Go/src/net/http/server.go:2039 +0x5e8
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3285 +0x4b4
+2024/07/02 09:17:48 server.go:3413: http: panic serving 127.0.0.1:62375: template: layout.html:19: function "url" not defined
+goroutine 34 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1898 +0xbe
+panic({0x657d40?, 0xc00019a0c0?})
+	C:/Program Files/Go/src/runtime/panic.go:770 +0x132
+html/template.Must(...)
+	C:/Program Files/Go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x757530, 0xc0001b0000}, {0x644aa0, 0x7533c0}, {0xc000195ab8?, 0xc000184008?, 0xc000195aa0?})
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/server.go:19 +0x23a
+bbs-development/app/controllers.top({0x757530?, 0xc0001b0000?}, 0xc000195b30?)
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/route_main.go:13 +0x6f
+net/http.HandlerFunc.ServeHTTP(0x9b4140?, {0x757530?, 0xc0001b0000?}, 0x59b1da?)
+	C:/Program Files/Go/src/net/http/server.go:2166 +0x29
+net/http.(*ServeMux).ServeHTTP(0x359139?, {0x757530, 0xc0001b0000}, 0xc00019c000)
+	C:/Program Files/Go/src/net/http/server.go:2683 +0x1ad
+net/http.serverHandler.ServeHTTP({0xc000188090?}, {0x757530?, 0xc0001b0000?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:3137 +0x8e
+net/http.(*conn).serve(0xc00018c000, {0x757c20, 0xc000088120})
+	C:/Program Files/Go/src/net/http/server.go:2039 +0x5e8
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3285 +0x4b4
+2024/07/02 09:17:53 server.go:3413: http: panic serving 127.0.0.1:62376: template: layout.html:19: function "url" not defined
+goroutine 36 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1898 +0xbe
+panic({0x657d40?, 0xc0000222f0?})
+	C:/Program Files/Go/src/runtime/panic.go:770 +0x132
+html/template.Must(...)
+	C:/Program Files/Go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x757530, 0xc00013a1c0}, {0x644aa0, 0x7533c0}, {0xc000195ab8?, 0xc000184508?, 0xc000195aa0?})
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/server.go:19 +0x23a
+bbs-development/app/controllers.top({0x757530?, 0xc00013a1c0?}, 0xc000195b30?)
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/route_main.go:13 +0x6f
+net/http.HandlerFunc.ServeHTTP(0x9b4140?, {0x757530?, 0xc00013a1c0?}, 0x59b1da?)
+	C:/Program Files/Go/src/net/http/server.go:2166 +0x29
+net/http.(*ServeMux).ServeHTTP(0x359139?, {0x757530, 0xc00013a1c0}, 0xc00019c240)
+	C:/Program Files/Go/src/net/http/server.go:2683 +0x1ad
+net/http.serverHandler.ServeHTTP({0xc000188510?}, {0x757530?, 0xc00013a1c0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:3137 +0x8e
+net/http.(*conn).serve(0xc00018c1b0, {0x757c20, 0xc000088120})
+	C:/Program Files/Go/src/net/http/server.go:2039 +0x5e8
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3285 +0x4b4
+2024/07/02 09:18:19 server.go:3413: http: panic serving 127.0.0.1:62392: template: layout.html:19: function "url" not defined
+goroutine 7 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1898 +0xbe
+panic({0x657d40?, 0xc0000223d0?})
+	C:/Program Files/Go/src/runtime/panic.go:770 +0x132
+html/template.Must(...)
+	C:/Program Files/Go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x757530, 0xc00013a380}, {0x644aa0, 0x7533c0}, {0xc000195ab8?, 0xc000063908?, 0xc000195aa0?})
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/server.go:19 +0x23a
+bbs-development/app/controllers.top({0x757530?, 0xc00013a380?}, 0xc000195b30?)
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/route_main.go:13 +0x6f
+net/http.HandlerFunc.ServeHTTP(0x9b4140?, {0x757530?, 0xc00013a380?}, 0x59b1da?)
+	C:/Program Files/Go/src/net/http/server.go:2166 +0x29
+net/http.(*ServeMux).ServeHTTP(0x359139?, {0x757530, 0xc00013a380}, 0xc00010c7e0)
+	C:/Program Files/Go/src/net/http/server.go:2683 +0x1ad
+net/http.serverHandler.ServeHTTP({0xc00001d5c0?}, {0x757530?, 0xc00013a380?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:3137 +0x8e
+net/http.(*conn).serve(0xc00013e120, {0x757c20, 0xc000088120})
+	C:/Program Files/Go/src/net/http/server.go:2039 +0x5e8
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3285 +0x4b4
+2024/07/02 09:18:49 server.go:3413: http: panic serving 127.0.0.1:62396: template: layout.html:21: function "url" not defined
+goroutine 9 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1898 +0xbe
+panic({0x657d40?, 0xc0000224b0?})
+	C:/Program Files/Go/src/runtime/panic.go:770 +0x132
+html/template.Must(...)
+	C:/Program Files/Go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x757530, 0xc00013a540}, {0x644aa0, 0x7533c0}, {0xc000195ab8?, 0xc00017c008?, 0xc000195aa0?})
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/server.go:19 +0x23a
+bbs-development/app/controllers.top({0x757530?, 0xc00013a540?}, 0xc000195b30?)
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/route_main.go:13 +0x6f
+net/http.HandlerFunc.ServeHTTP(0x9b4140?, {0x757530?, 0xc00013a540?}, 0x59b1da?)
+	C:/Program Files/Go/src/net/http/server.go:2166 +0x29
+net/http.(*ServeMux).ServeHTTP(0x359139?, {0x757530, 0xc00013a540}, 0xc00010ca20)
+	C:/Program Files/Go/src/net/http/server.go:2683 +0x1ad
+net/http.serverHandler.ServeHTTP({0xc00001da10?}, {0x757530?, 0xc00013a540?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:3137 +0x8e
+net/http.(*conn).serve(0xc00013e2d0, {0x757c20, 0xc000088120})
+	C:/Program Files/Go/src/net/http/server.go:2039 +0x5e8
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3285 +0x4b4
+2024/07/02 09:19:39 server.go:3413: http: panic serving 127.0.0.1:62414: template: top.html:8: function "url" not defined
+goroutine 19 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1898 +0xbe
+panic({0x1187d40?, 0xc000022160?})
+	C:/Program Files/Go/src/runtime/panic.go:770 +0x132
+html/template.Must(...)
+	C:/Program Files/Go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x1287530, 0xc000074000}, {0x1174aa0, 0x12833c0}, {0xc000027ab8?, 0xc0000a1688?, 0xc000027aa0?})
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/server.go:19 +0x23a
+bbs-development/app/controllers.top({0x1287530?, 0xc000074000?}, 0xc000027b30?)
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/route_main.go:13 +0x6f
+net/http.HandlerFunc.ServeHTTP(0x14e4140?, {0x1287530?, 0xc000074000?}, 0x10cb1da?)
+	C:/Program Files/Go/src/net/http/server.go:2166 +0x29
+net/http.(*ServeMux).ServeHTTP(0xe89139?, {0x1287530, 0xc000074000}, 0xc00005e000)
+	C:/Program Files/Go/src/net/http/server.go:2683 +0x1ad
+net/http.serverHandler.ServeHTTP({0xc00001c060?}, {0x1287530?, 0xc000074000?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:3137 +0x8e
+net/http.(*conn).serve(0xc000110000, {0x1287c20, 0xc000089290})
+	C:/Program Files/Go/src/net/http/server.go:2039 +0x5e8
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3285 +0x4b4
+2024/07/02 09:20:40 server.go:3413: http: panic serving 127.0.0.1:62458: template: top.html:9: function "url" not defined
+goroutine 6 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1898 +0xbe
+panic({0x537d40?, 0xc0000223d0?})
+	C:/Program Files/Go/src/runtime/panic.go:770 +0x132
+html/template.Must(...)
+	C:/Program Files/Go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x637530, 0xc00013a1c0}, {0x524aa0, 0x6333c0}, {0xc000027ab8?, 0xc000063688?, 0xc000027aa0?})
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/server.go:19 +0x23a
+bbs-development/app/controllers.top({0x637530?, 0xc00013a1c0?}, 0xc000027b30?)
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/route_main.go:13 +0x6f
+net/http.HandlerFunc.ServeHTTP(0x894140?, {0x637530?, 0xc00013a1c0?}, 0x47b1da?)
+	C:/Program Files/Go/src/net/http/server.go:2166 +0x29
+net/http.(*ServeMux).ServeHTTP(0x239139?, {0x637530, 0xc00013a1c0}, 0xc00010c6c0)
+	C:/Program Files/Go/src/net/http/server.go:2683 +0x1ad
+net/http.serverHandler.ServeHTTP({0xc00001d3b0?}, {0x637530?, 0xc00013a1c0?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:3137 +0x8e
+net/http.(*conn).serve(0xc000140000, {0x637c20, 0xc00001d2c0})
+	C:/Program Files/Go/src/net/http/server.go:2039 +0x5e8
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3285 +0x4b4
+2024/07/02 09:20:41 server.go:3413: http: panic serving 127.0.0.1:62460: template: top.html:9: function "url" not defined
+goroutine 8 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1898 +0xbe
+panic({0x537d40?, 0xc000022510?})
+	C:/Program Files/Go/src/runtime/panic.go:770 +0x132
+html/template.Must(...)
+	C:/Program Files/Go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x637530, 0xc00013a380}, {0x524aa0, 0x6333c0}, {0xc00004dab8?, 0xc00017c008?, 0xc00004daa0?})
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/server.go:19 +0x23a
+bbs-development/app/controllers.top({0x637530?, 0xc00013a380?}, 0xc00004db30?)
+	C:/Users/yu14c/go/src/bbs-development/app/controllers/route_main.go:13 +0x6f
+net/http.HandlerFunc.ServeHTTP(0x894140?, {0x637530?, 0xc00013a380?}, 0x47b1da?)
+	C:/Program Files/Go/src/net/http/server.go:2166 +0x29
+net/http.(*ServeMux).ServeHTTP(0x239139?, {0x637530, 0xc00013a380}, 0xc00010cea0)
+	C:/Program Files/Go/src/net/http/server.go:2683 +0x1ad
+net/http.serverHandler.ServeHTTP({0xc00001d9e0?}, {0x637530?, 0xc00013a380?}, 0x6?)
+	C:/Program Files/Go/src/net/http/server.go:3137 +0x8e
+net/http.(*conn).serve(0xc0001401b0, {0x637c20, 0xc00001d2c0})
+	C:/Program Files/Go/src/net/http/server.go:2039 +0x5e8
+created by net/http.(*Server).Serve in goroutine 1
+	C:/Program Files/Go/src/net/http/server.go:3285 +0x4b4

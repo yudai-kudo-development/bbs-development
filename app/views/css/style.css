@@ -1,0 +1,88 @@
+/* フォーマット　*/
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+        width:75%;
+    margin:0 auto;
+    background-image:url("../picture/background.webp");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+header {
+    background-color: aquamarine;
+    text-align: center;
+
+}
+
+a {
+    text-decoration: none;
+}
+
+nav {
+    background-color: aliceblue;
+}
+#sidebar {
+    background-color: azure;
+}
+#footer_navi {
+    background-color: aquamarine;
+    text-align: center;
+}
+
+.inline-block li {
+    display: inline-block;
+    list-style: none;
+    padding: 5px 10px;
+    margin: 5px 20px;
+    border-radius: 10px;
+}
+
+#container {
+    display: flex;
+    margin-top: 20px;
+}
+
+#sidebar {
+    flex: 1;
+}
+
+#main {
+    background-color: azure;
+    text-align: left;
+    flex: 5;
+    padding: 10px;
+}
+
+#sidebar {
+    border-right: solid 1px;
+}
+
+#sidebar h2 {
+    background-color: aquamarine;
+    padding: 10px;
+    margin-bottom: 10px;
+
+}
+
+.block li {
+    list-style: none;
+    margin-left: 10px;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.button li:hover{
+    background-color: yellow;
+}
+
+
+
+
+/* top */
