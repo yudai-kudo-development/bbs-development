@@ -5,72 +5,52 @@
                 </h2>
                 <ul class="block button">
                     <!---searchcontest.phpにジャンルを指定した状態で遷移--->
-                    <li><a href="//">ジャ ンル1</a></li>
+                    <li><a href="//">ジャンル1</a></li>
                 </ul>
             </div>
+            <div>
+                <h2>
+                    お題投稿
+                </h2>
+                <form action="/submit_topic" method="post" enctype="multipart/form-data">
+                    <div>
+                        <label for="title">タイトル:</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div>
+                        <label for="description"><br>説明:<br></label>
+                        <textarea id="description" name="description" rows="4" cols="50" required></textarea>
+                    </div>
+                    <div>
+                        <label for="category">カテゴリ:</label>
+                        <select id="category" name="category" required>
+                            <option value="technology">技術</option>
+                            <option value="science">科学</option>
+                            <option value="art">アート</option>
+                            <option value="education">教育</option>
+                            <!-- その他のカテゴリをここに追加 -->
+                        </select>
+                    </div>
+                    <!-- <div>
+                        <label for="file">添付ファイル:</label>
+                        <input type="file" id="file" name="file">
+                    </div> -->
+                    <div>
+                        <button type="submit">投稿する</button>
+                    </div>
+                </form>
+            </div>
             <div class="float" id="main">
-                <div>
-                    <h1 id="main_explanation">みんなの面白掲示板とは！？</h1>
-                    <p>
-                        ジャンル不問の熱き戦い<br>
-                        トップになる快感を今この手に！
-                    </p>
-                </div>
                 <div class="contents">
                     <div id="main_new">
-                        <h2>新着掲示板</h2>
+                        <h2>新着お題</h2>
                         <p><a href="//">選手権をもっと見る</a></p>
                         <div>
                             <h3>選手権タイトル</h3>
                             <!---選手権作成日を入れたい--->
                             <p>選手権説明</p>
                         </div>
-                        <div>
-                            <h3>選手権タイトル</h3>
-                            <!---選手権作成日を入れたい--->
-                            <p>選手権説明</p>
-                        </div>
-                        <div>
-                            <h3>選手権タイトル</h3>
-                            <!---選手権作成日を入れたい--->
-                            <p>選手権説明</p>
-                        </div>
-                        <div>
-                            <h3>選手権タイトル</h3>
-                            <!---選手権作成日を入れたい--->
-                            <p>選手権説明</p>
-                        </div>
-                        <div>
-                            <h3>選手権タイトル</h3>
-                            <!---選手権作成日を入れたい--->
-                            <p>選手権説明</p>
-                        </div>
-                        <div>
-                            <h3>選手権タイトル</h3>
-                            <!---選手権作成日を入れたい--->
-                            <p>選手権説明</p>
-                        </div>
-                        <div>
-                            <h3>選手権タイトル</h3>
-                            <!---選手権作成日を入れたい--->
-                            <p>選手権説明</p>
-                        </div>
-                        <div>
-                            <h3>選手権タイトル</h3>
-                            <!---選手権作成日を入れたい--->
-                            <p>選手権説明</p>
-                        </div>
-                        <div>
-                            <h3>選手権タイトル</h3>
-                            <!---選手権作成日を入れたい--->
-                            <p>選手権説明</p>
-                        </div>
-                        <div>
-                            <h3>選手権タイトル</h3>
-                            <!---選手権作成日を入れたい--->
-                            <p>選手権説明</p>
-                        </div>
-                    <p><a href="//">選手権をもっと見る</a></p>
+                    <p><a href="//">お題をもっと見る</a></p>
                     </div>
                 </div>
             </div>
