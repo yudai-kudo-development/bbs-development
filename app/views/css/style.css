@@ -6,7 +6,7 @@
 }
 
 body {
-        width:75%;
+    width:75%;
     margin:0 auto;
     background-image:url("../picture/background.webp");
     background-size: cover;
@@ -81,7 +81,28 @@ nav {
     background-color: yellow;
 }
 
-
-
-
-/* top */
+.float {
+    float: left;
+    width: 50%;
+    padding: 20px;
+}
+.contents {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.contents h3 {
+    margin-top: 0;
+}
+.item {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+.item:last-child {
+    border-bottom: none;
+}
+.item p {
+    margin: 0;
+    font-weight: bold;
+}

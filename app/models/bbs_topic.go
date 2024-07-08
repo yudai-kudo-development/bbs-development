@@ -9,8 +9,9 @@ import (
 	// "path/filepath"
 	"database/sql"
 	"log"
-	
+
 	_ "github.com/lib/pq"
+	_ "golang.org/x/text/date"
 )
 
 var Db *sql.DB
@@ -23,7 +24,7 @@ type Topic struct {
 	Category string
 }
 
-func GetTopics (w http.ResponseWriter, r *http.Request) (topics []Topic, err error) {
+func GetTopics (w http.ResponseWriter, r *http.Request) (Topics []Topic, err error) {
 	
 	Db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -46,11 +47,11 @@ func GetTopics (w http.ResponseWriter, r *http.Request) (topics []Topic, err err
 		if err != nil {
 			log.Fatalln(err)
 		}
-		topics = append(topics, topic)
+		Topics = append(Topics, topic)
 	}
 
 	rows.Close()
 
-	return topics, err
+	return Topics, err
 
 }

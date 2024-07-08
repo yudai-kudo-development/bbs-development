@@ -19,15 +19,14 @@ var Db *sql.DB
 var connStr = "user=yudai.kudo dbname=bbs_development sslmode=disable"
 
 func top (w http.ResponseWriter, r *http.Request) () {
-	fmt.Println("Received a request")
-
-	topics, err := models.GetTopics(w,r)
+	Topics, err := models.GetTopics(w,r)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(topics)
-	generateHTML(w, topics, "layout", "top")
+	fmt.Println(Topics)
+	fmt.Printf("%T\n", Topics)
+	generateHTML(w, Topics, "layout", "top")
 }
 
 func submit_topic (w http.ResponseWriter, r *http.Request) {

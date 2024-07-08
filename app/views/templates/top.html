@@ -42,17 +42,16 @@
             </div>
             <div class="float" id="main">
                 <div class="contents">
+                    <h3>お題一覧</h3>
                     <div id="main_new">
-                        <h2>新着お題</h2>
-                        <p><a href="//">選手権をもっと見る</a></p>
-                        <div>
-                            <h3>選手権タイトル</h3>
-                            <span>{{.Title}}</span>
-                            <p>選手権説明</p>
+                        {{range .}}
+                        <div class="item">
+                            <p>タイトル: {{.Title}}</p>
+                            <p>タイトル説明: {{.Description}}</p>
+                            <p>カテゴリー: {{.Category}}</p>
                         </div>
-                    <p><a href="//">お題をもっと見る</a></p>
+                        {{end}}
                     </div>
                 </div>
             </div>
-{{.}}
 {{end}}
