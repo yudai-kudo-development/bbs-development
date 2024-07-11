@@ -1,0 +1,40 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>掲示板</title>
+        <meta name="description" content="競え！">
+        <link rel="stylesheet" href="/static/css/style.css">
+    </head>
+    <body>
+        <header>
+            <h1>掲示板</h1>
+            <nav id="menu-navi">
+                <ul class="inline-block button">
+                    <li><a href="./index.php">トップ</a></li>
+                    <li><a href="./newcontest.php">お題投稿</a></li>
+                    <li><a href="//">お題を探す</a></li>
+                    <!---searchcontest.phpのフィルターで新着を選択した状態に遷移--->
+                    <li><a href="//">新着</a></li>
+                    <!---searchcontest.phpのフィルターでランキングを選択した状態で遷移--->
+                    <li><a href="//">ランキング</a></li>
+                    <li><a href="//">お知らせ</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div id="container">
+            {{template "content" . }}
+        </div>
+        <footer>
+            <div id="footer_navi">
+                <ul class="inline-block button">
+                    <li>掲示板</li>
+                </ul>
+            </div>
+        </footer>
+        <script src="./js/index.js"></script>
+    </body>
+</html>
+{{end}}
