@@ -26,11 +26,5 @@ func StartMainServer() error {
 
 	http.HandleFunc("/", top)
 	http.HandleFunc("/submit_topic", submit_topic)
-	// http.HandleFunc("/login", login)
-	// http.HandleFunc("/authenticate", authenticate)
-	// http.HandleFunc("/todos", index)
-	// http.HandleFunc("/todos/edit/{id}", edit)
-	// http.HandleFunc("/todos/update/", updateTodoHandler)
-	// http.HandleFunc("/logout", logout)
 	return http.ListenAndServe(":" + config.Config.Port, nil)
 }

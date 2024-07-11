@@ -96,7 +96,7 @@ nav {
 }
 .item {
     margin-bottom: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #aaa;
     padding-bottom: 10px;
 }
 .item:last-child {
@@ -105,4 +105,11 @@ nav {
 .item p {
     margin: 0;
     font-weight: bold;
+}
+
+.recent_topics {
+    border: dotted 2px #e0e0e0;
+    background-color: #f0f0f0;
+    padding: 4px;
+    font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", "charset=Shift_JIS", sans-serif;
 }

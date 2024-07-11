@@ -25,7 +25,6 @@ func top (w http.ResponseWriter, r *http.Request) () {
 	}
 
 	fmt.Println(Topics)
-	fmt.Printf("%T\n", Topics)
 	generateHTML(w, Topics, "layout", "top")
 }
 
