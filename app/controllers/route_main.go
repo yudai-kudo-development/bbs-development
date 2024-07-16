@@ -1,57 +1,96 @@
 package controllers
 
 import (
-	// "fmt"
-	// "log"
 	"net/http"
-	// "strconv"
 	"bbs-development/app/models"
-	// "path/filepath"
 	"database/sql"
-	"log"
 	"fmt"
-	
+	"path/filepath"
+	"strconv"
 	_ "github.com/lib/pq"
 )
 
 var Db *sql.DB
-// TODO:configに接続情報をまとめる
-var connStr = "user=yudai.kudo dbname=bbs_development sslmode=disable"
 
-func top (w http.ResponseWriter, r *http.Request) () {
-	Topics, err := models.GetTopics(w,r)
+func Top (w http.ResponseWriter, r *http.Request) () {
+	Topics, err := models.GetRecentTopics(w,r)
+	if err != nil {
+		fmt.Println(err)
+	}
+	generateHTML(w, Topics, "layout", "top")
+}
+
+func GetTopic (w http.ResponseWriter, r *http.Request) () {
+	idStr := filepath.Base(r.URL.Path)
+	if idStr == "" {
+		http.Error(w, "ID is required", http.StatusBadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	topics, err := models.GetIndividualTopic(id)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Print(topics)
+	generateHTML(w, topics, "layout", "individualtopic")
+}
+
+func SunbmitTopic (w http.ResponseWriter, r *http.Request) () {
+	_, err := models.PostTopics(w,r)
+	if err != nil {
+		fmt.Println(err)
+	}
+	http.Redirect(w, r, "/", 302)
+}
+
+func SunbmitReply (w http.ResponseWriter, r *http.Request) () {
+	if r.Method == "POST" {
+	idStr := filepath.Base(r.URL.Path)
+	if idStr == "" {
+		http.Error(w, "ID is required", http.StatusBadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println("idの変換成功")
+
+	_, err = models.PostReply(id, r)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(Topics)
-	generateHTML(w, Topics, "layout", "top")
+	fmt.Println("PostReplyメソッド成功")
+
+	redirectURL := fmt.Sprintf("/topics/%d", id)
+	http.Redirect(w, r, redirectURL, 302)
+	}
 }
 
-func submit_topic (w http.ResponseWriter, r *http.Request) {
+func GetSearchTopicPage (w http.ResponseWriter, r *http.Request) () {
+	data := ""
+	generateHTML(w, data, "layout", "searchtopic")
+}
 
-		Db, err := sql.Open("postgres", connStr)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer Db.Close()
-	
-		fmt.Println("DB接続完了")
-	
+func SearchTopic (w http.ResponseWriter, r *http.Request) () {
+
 	if r.Method == "POST" {
-		title := r.FormValue("title")
-		description := r.FormValue("description")
-		category := r.FormValue("category")
-
-		insert, err := Db.Prepare("INSERT INTO bbs_topics(topic_title, topic_description, topic_category) VALUES ($1,$2,$3)")
+		Topics, err := models.GetTopics(w,r)
 		if err != nil {
 			fmt.Println(err)
 		}
-
-		insert.Exec(title, description, category)
-
+		
+		fmt.Println(Topics)
+		generateHTML(w, Topics, "layout", "searchtopic")
 	}
-
-	http.Redirect(w, r, "/", 302)
-
 }

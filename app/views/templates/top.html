@@ -1,53 +1,42 @@
 {{define "content"}}
-            <div class="float" id="sidebar">
-                <h2>
-                    ジャンル
-                </h2>
-                <ul class="block button">
-                    <!---searchcontest.phpにジャンルを指定した状態で遷移--->
-                    <li><a href="//">ジャンル1</a></li>
-                </ul>
+    <h2>
+        お題投稿
+    </h2>
+    <form action="/submit_topic" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="title">タイトル:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div>
+            <label for="description"><br>説明:<br></label>
+            <textarea id="description" name="description" rows="4" cols="50" required></textarea>
+        </div>
+        <div>
+            <label for="category">カテゴリ:</label>
+            <select id="category" name="category" required>
+                <option value="技術">技術</option>
+                <option value="科学">科学</option>
+                <option value="アート">アート</option>
+                <option value="教育">教育</option>
+                <option value="その他">その他</option>
+            </select>
+        </div>
+        <!-- <div>
+            <label for="file">添付ファイル:</label>
+            <input type="file" id="file" name="file">
+        </div> -->
+        <div>
+            <button type="submit">投稿する</button>
+        </div>
+    </form>
+    <div id="recent_topics">
+        <h3>最新お題一覧</h3>
+            {{range .}}
+            <div class="recent_topics">
+                <p><a href="http://localhost:8081/topics/{{.ID}}">タイトル: {{.Title}} カテゴリー: {{.Category}}</a></p>
+                <p>投稿日: {{.CreatedAt}}</p>
+                <p>タイトル説明: {{.Description}}</p>
             </div>
-            <div>
-                <h2>
-                    お題投稿
-                </h2>
-                <form action="/submit_topic" method="post" enctype="multipart/form-data">
-                    <div>
-                        <label for="title">タイトル:</label>
-                        <input type="text" id="title" name="title" required>
-                    </div>
-                    <div>
-                        <label for="description"><br>説明:<br></label>
-                        <textarea id="description" name="description" rows="4" cols="50" required></textarea>
-                    </div>
-                    <div>
-                        <label for="category">カテゴリ:</label>
-                        <select id="category" name="category" required>
-                            <option value="technology">技術</option>
-                            <option value="science">科学</option>
-                            <option value="art">アート</option>
-                            <option value="education">教育</option>
-                            <!-- その他のカテゴリをここに追加 -->
-                        </select>
-                    </div>
-                    <!-- <div>
-                        <label for="file">添付ファイル:</label>
-                        <input type="file" id="file" name="file">
-                    </div> -->
-                    <div>
-                        <button type="submit">投稿する</button>
-                    </div>
-                </form>
-                <div id="recent_topics">
-                    <h3>最新お題一覧</h3>
-                        {{range .}}
-                        <div class="recent_topics">
-                            <p>タイトル: {{.Title}} カテゴリー: {{.Category}}</p>
-                            <p>投稿日: {{.FormattedCreatedAt}}</p>
-                            <p>タイトル説明: {{.Description}}</p>
-                        </div>
-                        {{end}}
-                </div>
-            </div>
+            {{end}}
+    </div>
 {{end}}

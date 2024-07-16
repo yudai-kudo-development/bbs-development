@@ -42,7 +42,6 @@ nav {
 }
 
 #container {
-    display: flex;
     margin-top: 20px;
 }
 
@@ -112,4 +111,23 @@ nav {
     background-color: #f0f0f0;
     padding: 4px;
     font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", "charset=Shift_JIS", sans-serif;
+}
+
+/* 返信 */
+
+.topic {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+}
+.replies {
+    margin-top: 40px;
+}
+.reply {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+.reply:last-child {
+    border-bottom: none;
 }
