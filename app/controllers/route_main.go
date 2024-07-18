@@ -17,7 +17,7 @@ func Top (w http.ResponseWriter, r *http.Request) () {
 	if err != nil {
 		fmt.Println(err)
 	}
-	generateHTML(w, Topics, "layout", "top")
+	generateHTML(w, Topics, "layout", "top", "public_navbar")
 }
 
 func GetTopic (w http.ResponseWriter, r *http.Request) () {

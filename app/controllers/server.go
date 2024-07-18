@@ -30,6 +30,7 @@ func StartMainServer() error {
 	http.HandleFunc("/submit_reply/{id}", SunbmitReply)
 	http.HandleFunc("/topics", GetSearchTopicPage)
 	http.HandleFunc("/search_topics", SearchTopic)
+	http.HandleFunc("/signup", Signup)
 
 	return http.ListenAndServe(":" + config.Config.Port, nil)
 }
