@@ -8,7 +8,6 @@
 body {
     width:75%;
     margin:0 auto;
-    background-image:url("../picture/background.webp");
     background-size: cover;
     background-repeat: no-repeat;
 }

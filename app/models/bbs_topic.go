@@ -15,10 +15,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var Db *sql.DB
-// TODO:configに接続情報をまとめる
-var connStr = "user=yudai.kudo dbname=bbs_development sslmode=disable"
-
 type Topic struct {
     ID          int
     Title       string

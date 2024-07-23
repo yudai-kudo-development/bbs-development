@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"net/http"
 	"bbs-development/app/models"
 	"database/sql"
 	"fmt"
+	"net/http"
 	"path/filepath"
 	"strconv"
+
 	_ "github.com/lib/pq"
 )
 
@@ -17,7 +18,7 @@ func Top (w http.ResponseWriter, r *http.Request) () {
 	if err != nil {
 		fmt.Println(err)
 	}
-	generateHTML(w, Topics, "layout", "top", "public_navbar")
+	generateHTML(w, Topics, "layout", "top")
 }
 
 func GetTopic (w http.ResponseWriter, r *http.Request) () {
@@ -94,3 +95,23 @@ func SearchTopic (w http.ResponseWriter, r *http.Request) () {
 		generateHTML(w, Topics, "layout", "searchtopic")
 	}
 }
+
+func ShowMypage (w http.ResponseWriter, r *http.Request) () {
+
+	session, err := session(r)
+	fmt.Println("ShowMypageのsession抜ける")
+	if err != nil {
+		http.Redirect(w,r, "/login", 302)
+	}
+
+		fmt.Println("elseの処理に入る")
+		user, err := session.GetUserBySession()
+		if err != nil {
+			fmt.Println("user返すところでエラー")
+			fmt.Println(err)
+		}
+
+	generateHTML(w, user, "layout", "mypage")
+}
+
+
