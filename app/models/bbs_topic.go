@@ -2,11 +2,8 @@ package models
 
 import (
 	"fmt"
-	// "log"
 	"net/http"
 	"strings"
-	// "todo_app/app/models"
-	// "path/filepath"
 	"database/sql"
 	"log"
 	"time"
@@ -40,7 +37,7 @@ func GetRecentTopics (w http.ResponseWriter, r *http.Request) (Topics []Topic, e
 	}
 	for rows.Next() {
 		var topic Topic
-        var createdAt time.Time
+    var createdAt time.Time
 
 		weekday := strings.NewReplacer(
 			"Sun", "日",

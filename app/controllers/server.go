@@ -25,9 +25,9 @@ func StartMainServer() error {
 	http.Handle("/static/", http.StripPrefix("/static/", files))
 
 	http.HandleFunc("/", Top)
-	http.HandleFunc("/submit_topic", SunbmitTopic)
+	http.HandleFunc("/submit_topic", PostTopic)
 	http.HandleFunc("/topics/{id}", GetTopic)
-	http.HandleFunc("/submit_reply/{id}", SunbmitReply)
+	http.HandleFunc("/submit_reply/{id}", PostReply)
 	http.HandleFunc("/topics", GetSearchTopicPage)
 	http.HandleFunc("/search_topics", SearchTopic)
 	http.HandleFunc("/signup", Signup)
@@ -40,15 +40,11 @@ func StartMainServer() error {
 
 func session (r *http.Request) (sess models.Session, err error) {
 	cookie , err := r.Cookie("_cookie")
-	fmt.Println(cookie)
 
 	if err == nil {
-		fmt.Println("セッションチェックに入る")
 		sess = models.Session{UUID: cookie.Value}
-		fmt.Println(sess)
 		
 		if ok, _ := sess.CheckSession(); !ok {
-			fmt.Println("セッションチェック失敗")
 			err = fmt.Errorf("Invalid Session")
 		}
 	}
