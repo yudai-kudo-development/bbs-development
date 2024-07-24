@@ -38,7 +38,7 @@ func GetTopic (w http.ResponseWriter, r *http.Request) () {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Print(topics)
+	fmt.Printf("Reply: %+v\n", topics)
 	generateHTML(w, topics, "layout", "individualtopic")
 }
 
@@ -64,14 +64,10 @@ func SunbmitReply (w http.ResponseWriter, r *http.Request) () {
 		return
 	}
 
-	fmt.Println("idの変換成功")
-
 	_, err = models.PostReply(id, r)
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	fmt.Println("PostReplyメソッド成功")
 
 	redirectURL := fmt.Sprintf("/topics/%d", id)
 	http.Redirect(w, r, redirectURL, 302)

@@ -1,34 +1,32 @@
 {{define "content"}}
-    {{range .}}
-    <div class="topic">
-        <h3>{{.Title}}</h3>
-        <div class="recent_topics">
-            <p>{{.CreatedAt}} {{.Category}}</a></p>
-            <p>タイトル説明: {{.Description}}</p>
+        <div class="topic">
+            <h3>{{.Title}}</h3>
+            <div class="recent_topics">
+                <p>{{.CreatedAt}} {{.Category}}</a></p>
+                <p>タイトル説明: {{.Description}}</p>
+            </div>
         </div>
-    </div>
-    <form action="/submit_reply/{{.ID}}" method="post" enctype="multipart/form-data">
-        <div>
-            <label for="name">名前:</label>
-            <input type="text" id="name" name="name" required>
+        <form action="/submit_reply/{{.ID}}" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="name">名前:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <label for="content"><br>返信内容:<br></label>
+                <textarea id="content" name="content" rows="4" cols="50" required></textarea>
+            </div>
+            <div>
+                <button type="submit">返信する</button>
+            </div>
+        </form>
+        <div class="replies">
+            <h2>返信</h2>
+            {{range .Replies}}
+            <div class="reply">
+                <p><strong>返信者:</strong>{{.Name}}</p>
+                <p><strong>返信内容:</strong> {{.Content}}</p>
+                <p><strong>返信時間:</strong> {{.CreatedAt}}</p>
+            </div>
+            {{end}}
         </div>
-        <div>
-            <label for="content"><br>返信内容:<br></label>
-            <textarea id="content" name="content" rows="4" cols="50" required></textarea>
-        </div>
-        <div>
-            <button type="submit">返信する</button>
-        </div>
-    </form>
-    <div class="replies">
-        <h2>返信</h2>
-        {{range .Replies}}
-        <div class="reply">
-            <p><strong>返信者:</strong>{{.Name}}</p>
-            <p><strong>返信内容:</strong> {{.Content}}</p>
-            <p><strong>返信時間:</strong> {{.CreatedAt}}</p>
-        </div>
-        {{end}}
-    </div>
-    {{end}}
 {{end}}

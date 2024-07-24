@@ -174,3 +174,184 @@ net/http.(*conn).serve(0xc0001401b0, {0x637c20, 0xc00001d2c0})
 	C:/Program Files/Go/src/net/http/server.go:2039 +0x5e8
 created by net/http.(*Server).Serve in goroutine 1
 	C:/Program Files/Go/src/net/http/server.go:3285 +0x4b4
+2024/07/16 20:56:17 bbs_topic.go:107: pq: relation "topic_view" does not exist
+2024/07/24 20:38:57 bbs_topic.go:103: pq: relation "topic_view" does not exist
+2024/07/24 21:00:09 bbs_topic.go:103: pq: relation "topic_view" does not exist
+2024/07/24 21:02:28 bbs_topic.go:91: pq: relation "topic_view" does not exist
+2024/07/24 21:19:30 bbs_topic.go:91: pq: column "topic_id" does not exist
+2024/07/24 22:10:30 server.go:3413: http: panic serving [::1]:56158: template: individualtopic.html:34: unexpected {{end}}
+goroutine 42 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1898 +0xb0
+panic({0x100aa4720?, 0x140000acf50?})
+	/usr/local/go/src/runtime/panic.go:770 +0x124
+html/template.Must(...)
+	/usr/local/go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x100b119a8, 0x140000dc460}, {0x100aeaa00, 0x14000383200}, {0x140002ada98?, 0x10?, 0x9?})
+	/usr/local/go/bbs-development/app/controllers/server.go:19 +0x218
+bbs-development/app/controllers.GetTopic({0x100b119a8, 0x140000dc460}, 0x140002adb18?)
+	/usr/local/go/bbs-development/app/controllers/route_main.go:42 +0x138
+net/http.HandlerFunc.ServeHTTP(0x100d840a0?, {0x100b119a8?, 0x140000dc460?}, 0x100927a28?)
+	/usr/local/go/src/net/http/server.go:2166 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x100b119a8, 0x140000dc460}, 0x14000240a20)
+	/usr/local/go/src/net/http/server.go:2683 +0x1a4
+net/http.serverHandler.ServeHTTP({0x1400007c030?}, {0x100b119a8?, 0x140000dc460?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3137 +0xbc
+net/http.(*conn).serve(0x140001961b0, {0x100b123b0, 0x140001154a0})
+	/usr/local/go/src/net/http/server.go:2039 +0x508
+created by net/http.(*Server).Serve in goroutine 1
+	/usr/local/go/src/net/http/server.go:3285 +0x3f0
+2024/07/24 22:10:30 server.go:3413: http: panic serving [::1]:56156: template: individualtopic.html:34: unexpected {{end}}
+goroutine 35 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1898 +0xb0
+panic({0x100aa4720?, 0x14000020390?})
+	/usr/local/go/src/runtime/panic.go:770 +0x124
+html/template.Must(...)
+	/usr/local/go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x100b119a8, 0x140000dc0e0}, {0x100aeaa00, 0x140002801e0}, {0x1400003ba98?, 0x10?, 0x9?})
+	/usr/local/go/bbs-development/app/controllers/server.go:19 +0x218
+bbs-development/app/controllers.GetTopic({0x100b119a8, 0x140000dc0e0}, 0x14000163b18?)
+	/usr/local/go/bbs-development/app/controllers/route_main.go:42 +0x138
+net/http.HandlerFunc.ServeHTTP(0x100d840a0?, {0x100b119a8?, 0x140000dc0e0?}, 0x100927a28?)
+	/usr/local/go/src/net/http/server.go:2166 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x100b119a8, 0x140000dc0e0}, 0x14000000120)
+	/usr/local/go/src/net/http/server.go:2683 +0x1a4
+net/http.serverHandler.ServeHTTP({0x14000115590?}, {0x100b119a8?, 0x140000dc0e0?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3137 +0xbc
+net/http.(*conn).serve(0x14000196000, {0x100b123b0, 0x140001154a0})
+	/usr/local/go/src/net/http/server.go:2039 +0x508
+created by net/http.(*Server).Serve in goroutine 1
+	/usr/local/go/src/net/http/server.go:3285 +0x3f0
+2024/07/24 22:10:30 server.go:3413: http: panic serving [::1]:56159: template: individualtopic.html:34: unexpected {{end}}
+goroutine 43 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1898 +0xb0
+panic({0x100aa4720?, 0x140000ac410?})
+	/usr/local/go/src/runtime/panic.go:770 +0x124
+html/template.Must(...)
+	/usr/local/go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x100b119a8, 0x140002e80e0}, {0x100aeaa00, 0x140000b04e0}, {0x14000257a98?, 0x10?, 0x9?})
+	/usr/local/go/bbs-development/app/controllers/server.go:19 +0x218
+bbs-development/app/controllers.GetTopic({0x100b119a8, 0x140002e80e0}, 0x14000359b18?)
+	/usr/local/go/bbs-development/app/controllers/route_main.go:42 +0x138
+net/http.HandlerFunc.ServeHTTP(0x100d840a0?, {0x100b119a8?, 0x140002e80e0?}, 0x100927a28?)
+	/usr/local/go/src/net/http/server.go:2166 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x100b119a8, 0x140002e80e0}, 0x14000240480)
+	/usr/local/go/src/net/http/server.go:2683 +0x1a4
+net/http.serverHandler.ServeHTTP({0x14000115aa0?}, {0x100b119a8?, 0x140002e80e0?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3137 +0xbc
+net/http.(*conn).serve(0x14000196240, {0x100b123b0, 0x140001154a0})
+	/usr/local/go/src/net/http/server.go:2039 +0x508
+created by net/http.(*Server).Serve in goroutine 1
+	/usr/local/go/src/net/http/server.go:3285 +0x3f0
+2024/07/24 22:10:30 server.go:3413: http: panic serving [::1]:56341: template: individualtopic.html:34: unexpected {{end}}
+goroutine 75 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1898 +0xb0
+panic({0x100aa4720?, 0x140000207b0?})
+	/usr/local/go/src/runtime/panic.go:770 +0x124
+html/template.Must(...)
+	/usr/local/go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x100b119a8, 0x140000dc2a0}, {0x100aeaa00, 0x140002809c0}, {0x1400003ba98?, 0x10?, 0x9?})
+	/usr/local/go/bbs-development/app/controllers/server.go:19 +0x218
+bbs-development/app/controllers.GetTopic({0x100b119a8, 0x140000dc2a0}, 0x1400007bb18?)
+	/usr/local/go/bbs-development/app/controllers/route_main.go:42 +0x138
+net/http.HandlerFunc.ServeHTTP(0x100d840a0?, {0x100b119a8?, 0x140000dc2a0?}, 0x100927a28?)
+	/usr/local/go/src/net/http/server.go:2166 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x100b119a8, 0x140000dc2a0}, 0x14000000a20)
+	/usr/local/go/src/net/http/server.go:2683 +0x1a4
+net/http.serverHandler.ServeHTTP({0x14000317200?}, {0x100b119a8?, 0x140000dc2a0?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3137 +0xbc
+net/http.(*conn).serve(0x140002842d0, {0x100b123b0, 0x140001154a0})
+	/usr/local/go/src/net/http/server.go:2039 +0x508
+created by net/http.(*Server).Serve in goroutine 1
+	/usr/local/go/src/net/http/server.go:3285 +0x3f0
+2024/07/24 22:10:31 server.go:3413: http: panic serving [::1]:56349: template: individualtopic.html:34: unexpected {{end}}
+goroutine 130 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1898 +0xb0
+panic({0x100aa4720?, 0x140000ac8f0?})
+	/usr/local/go/src/runtime/panic.go:770 +0x124
+html/template.Must(...)
+	/usr/local/go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x100b119a8, 0x140000dc380}, {0x100aeaa00, 0x140000b0d80}, {0x14000257a98?, 0x10?, 0x9?})
+	/usr/local/go/bbs-development/app/controllers/server.go:19 +0x218
+bbs-development/app/controllers.GetTopic({0x100b119a8, 0x140000dc380}, 0x14000077b18?)
+	/usr/local/go/bbs-development/app/controllers/route_main.go:42 +0x138
+net/http.HandlerFunc.ServeHTTP(0x100d840a0?, {0x100b119a8?, 0x140000dc380?}, 0x100927a28?)
+	/usr/local/go/src/net/http/server.go:2166 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x100b119a8, 0x140000dc380}, 0x14000000ea0)
+	/usr/local/go/src/net/http/server.go:2683 +0x1a4
+net/http.serverHandler.ServeHTTP({0x140003175f0?}, {0x100b119a8?, 0x140000dc380?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3137 +0xbc
+net/http.(*conn).serve(0x14000284480, {0x100b123b0, 0x140001154a0})
+	/usr/local/go/src/net/http/server.go:2039 +0x508
+created by net/http.(*Server).Serve in goroutine 1
+	/usr/local/go/src/net/http/server.go:3285 +0x3f0
+2024/07/24 22:10:37 server.go:3413: http: panic serving [::1]:56381: template: individualtopic.html:34: unexpected {{end}}
+goroutine 35 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1898 +0xb0
+panic({0x102c60720?, 0x140000ac390?})
+	/usr/local/go/src/runtime/panic.go:770 +0x124
+html/template.Must(...)
+	/usr/local/go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x102ccd9a8, 0x140001909a0}, {0x102ca6a00, 0x140000b0180}, {0x1400003ba98?, 0x10?, 0x9?})
+	/usr/local/go/bbs-development/app/controllers/server.go:19 +0x218
+bbs-development/app/controllers.GetTopic({0x102ccd9a8, 0x140001909a0}, 0x14000169b18?)
+	/usr/local/go/bbs-development/app/controllers/route_main.go:42 +0x138
+net/http.HandlerFunc.ServeHTTP(0x102f400a0?, {0x102ccd9a8?, 0x140001909a0?}, 0x102ae3a28?)
+	/usr/local/go/src/net/http/server.go:2166 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x102ccd9a8, 0x140001909a0}, 0x14000152900)
+	/usr/local/go/src/net/http/server.go:2683 +0x1a4
+net/http.serverHandler.ServeHTTP({0x14000115590?}, {0x102ccd9a8?, 0x140001909a0?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3137 +0xbc
+net/http.(*conn).serve(0x14000196000, {0x102cce3b0, 0x140001154a0})
+	/usr/local/go/src/net/http/server.go:2039 +0x508
+created by net/http.(*Server).Serve in goroutine 1
+	/usr/local/go/src/net/http/server.go:3285 +0x3f0
+2024/07/24 22:10:38 server.go:3413: http: panic serving [::1]:56388: template: individualtopic.html:34: unexpected {{end}}
+goroutine 21 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1898 +0xb0
+panic({0x102c60720?, 0x1400011e820?})
+	/usr/local/go/src/runtime/panic.go:770 +0x124
+html/template.Must(...)
+	/usr/local/go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x102ccd9a8, 0x140000da1c0}, {0x102ca6a00, 0x14000130ae0}, {0x140001b3a98?, 0x10?, 0x9?})
+	/usr/local/go/bbs-development/app/controllers/server.go:19 +0x218
+bbs-development/app/controllers.GetTopic({0x102ccd9a8, 0x140000da1c0}, 0x14000074b18?)
+	/usr/local/go/bbs-development/app/controllers/route_main.go:42 +0x138
+net/http.HandlerFunc.ServeHTTP(0x102f400a0?, {0x102ccd9a8?, 0x140000da1c0?}, 0x102ae3a28?)
+	/usr/local/go/src/net/http/server.go:2166 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x102ccd9a8, 0x140000da1c0}, 0x140000e4480)
+	/usr/local/go/src/net/http/server.go:2683 +0x1a4
+net/http.serverHandler.ServeHTTP({0x140000b4e70?}, {0x102ccd9a8?, 0x140000da1c0?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3137 +0xbc
+net/http.(*conn).serve(0x140000ce240, {0x102cce3b0, 0x140001154a0})
+	/usr/local/go/src/net/http/server.go:2039 +0x508
+created by net/http.(*Server).Serve in goroutine 1
+	/usr/local/go/src/net/http/server.go:3285 +0x3f0
+2024/07/24 22:10:43 server.go:3413: http: panic serving [::1]:56411: template: individualtopic.html:33: unexpected {{end}}
+goroutine 42 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1898 +0xb0
+panic({0x102c60720?, 0x14000020380?})
+	/usr/local/go/src/runtime/panic.go:770 +0x124
+html/template.Must(...)
+	/usr/local/go/src/html/template/template.go:368
+bbs-development/app/controllers.generateHTML({0x102ccd9a8, 0x14000190b60}, {0x102ca6a00, 0x1400007c2a0}, {0x140001afa98?, 0x10?, 0x9?})
+	/usr/local/go/bbs-development/app/controllers/server.go:19 +0x218
+bbs-development/app/controllers.GetTopic({0x102ccd9a8, 0x14000190b60}, 0x14000074b18?)
+	/usr/local/go/bbs-development/app/controllers/route_main.go:42 +0x138
+net/http.HandlerFunc.ServeHTTP(0x102f400a0?, {0x102ccd9a8?, 0x14000190b60?}, 0x102ae3a28?)
+	/usr/local/go/src/net/http/server.go:2166 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x102ccd9a8, 0x14000190b60}, 0x14000153560)
+	/usr/local/go/src/net/http/server.go:2683 +0x1a4
+net/http.serverHandler.ServeHTTP({0x140001c28a0?}, {0x102ccd9a8?, 0x14000190b60?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3137 +0xbc
+net/http.(*conn).serve(0x14000196360, {0x102cce3b0, 0x140001154a0})
+	/usr/local/go/src/net/http/server.go:2039 +0x508
+created by net/http.(*Server).Serve in goroutine 1
+	/usr/local/go/src/net/http/server.go:3285 +0x3f0

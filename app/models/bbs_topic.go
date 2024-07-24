@@ -19,7 +19,7 @@ type Topic struct {
     ID          int
     Title       string
     Description string
-	Category   string
+		Category   string
     CreatedAt   string
     Replies     []Reply
 }
@@ -74,12 +74,9 @@ func GetRecentTopics (w http.ResponseWriter, r *http.Request) (Topics []Topic, e
 	return Topics, err
 }
 
-func GetIndividualTopic (id int) ([]Topic, error) {
+func GetIndividualTopic (id int) (Topic, error) {
 	
-	topics := []Topic{}
-    topicMap := make(map[int]*Topic)
-	// var topicCreatedAt time.Time
-	// var replyCreatedAt time.Time
+	var topic Topic
 
 	Db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -87,74 +84,33 @@ func GetIndividualTopic (id int) ([]Topic, error) {
 	}
 	defer Db.Close()
 
-	// weekday := strings.NewReplacer(
-	// 	"Sun", "日",
-	// 	"Mon", "月",
-	// 	"Tue", "火",
-	// 	"Wed", "水",
-	// 	"Thu", "木",
-	// 	"Fri", "金",
-	// 	"Sat", "土",
-	// )
-
-	cmd := `SELECT * FROM topic_view WHERE topic_id = $1`
-	rows, err := Db.Query(cmd, id)
+	bbs_topic := `SELECT id, topic_title, topic_description, topic_category, created_at FROM bbs_topics WHERE id = $1`
+	err = Db.QueryRow(bbs_topic, id).Scan(&topic.ID, &topic.Title, &topic.Description, &topic.Category, &topic.CreatedAt)
 	if err != nil {
-		log.Fatalln(err)
+			return topic, err
 	}
 
-	for rows.Next() {
-		var (
-            topicID         int
-            topicTitle      string
-            topicDescription string
-			topicCategory   string
-            topicCreatedAt  string
-            replyID         sql.NullInt64
-			replyTopicID    sql.NullInt64
-            replyName       sql.NullString
-            replyContent    sql.NullString
-            replyCreatedAt  sql.NullString
-        )
-
-        err := rows.Scan(&topicID, &topicTitle, &topicDescription, &topicCategory, &topicCreatedAt, &replyID, &replyTopicID, &replyName, &replyContent, &replyCreatedAt)
-        if err != nil {
-            return nil, err
-        }
-
-        if _, exists := topicMap[topicID]; !exists {
-            topic := Topic{
-                ID:          topicID,
-                Title:       topicTitle,
-                Description: topicDescription,
-				Category:    topicCategory,
-                CreatedAt:   topicCreatedAt,
-                Replies:     []Reply{},
-            }
-            topics = append(topics, topic)
-            topicMap[topicID] = &topics[len(topics)-1]
-        }
-
-		if replyID.Valid {
-            reply := Reply{
-                ID:        int(replyID.Int64),
-                TopicID:   topicID,
-                Name:      replyName.String,
-                Content:   replyContent.String,
-                CreatedAt: replyCreatedAt.String,
-            }
-            topicMap[topicID].Replies = append(topicMap[topicID].Replies, reply)
-        }
-		
-		// formattedTopicDate := weekday.Replace(topicCreatedAt.Format("2006/1/2(Mon) 15:04:05"))
-		// IndividualTopic.TopicCreatedAt = formattedTopicDate
-		// formattedReplyDate := weekday.Replace(replyCreatedAt.Format("2006/1/2(Mon) 15:04:05"))
-		// IndividualTopic.ReplyCreatedAt = formattedReplyDate
+	bbs_replies := `SELECT id, bbs_topic_id, reply_name, reply_content, created_at FROM bbs_replies WHERE bbs_topic_id = $1`
+	rows, err := Db.Query(bbs_replies, id)
+	if err != nil {
+			return topic, err
 	}
-	
 	defer rows.Close()
 
-	return  topics, nil
+	for rows.Next() {
+			var reply Reply
+			err := rows.Scan(&reply.ID, &reply.TopicID, &reply.Name, &reply.Content, &reply.CreatedAt)
+			if err != nil {
+					return topic, err
+			}
+			topic.Replies = append(topic.Replies, reply)
+	}
+
+	if err := rows.Err(); err != nil {
+		return topic, err
+	}
+
+	return topic, err
 }
 
 func PostTopics (w http.ResponseWriter, r *http.Request) (err1 error, err2 error) {

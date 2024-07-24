@@ -53,16 +53,6 @@ func GetReplies (id int) (Replies []Reply, err error) {
 	}
 	defer Db.Close()
 
-	// weekday := strings.NewReplacer(
-	// 	"Sun", "日",
-	// 	"Mon", "月",
-	// 	"Tue", "火",
-	// 	"Wed", "水",
-	// 	"Thu", "木",
-	// 	"Fri", "金",
-	// 	"Sat", "土",
-	// )
-
 	cmd := `SELECT id, reply_name, reply_content, created_at FROM bbs_replies WHERE bbs_topic_id = $1`
 	err = Db.QueryRow(cmd, id).Scan(
 		&reply.ID,
@@ -74,9 +64,6 @@ func GetReplies (id int) (Replies []Reply, err error) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-
-		// formattedDate := weekday.Replace(createdAt.Format("2006/1/2(Mon) 15:04:05"))
-		// reply.FormattedCreatedAt = formattedDate
 
 		Replies = append(Replies, reply)
 
