@@ -43,11 +43,30 @@ func GetTopic (w http.ResponseWriter, r *http.Request) () {
 }
 
 func PostTopic (w http.ResponseWriter, r *http.Request) () {
-	_, err := models.PostTopics(w,r)
-	if err != nil {
-		fmt.Println(err)
+
+	session, _ := session(r)
+
+	if &session != nil {
+		user, err := session.GetUserBySession()
+		if err != nil {
+			fmt.Println(err)
+		}
+		
+		err = models.PostTopics(w, r, user.ID)
+		if err != nil {
+			fmt.Println(err)
+		}
+		http.Redirect(w, r, "/", 302)
+		
+	} else {
+		var user_id *int
+
+		err := models.PostTopics(w, r, user_id)
+		if err != nil {
+			fmt.Println(err)
+		}
+		http.Redirect(w, r, "/", 302)
 	}
-	http.Redirect(w, r, "/", 302)
 }
 
 func PostReply (w http.ResponseWriter, r *http.Request) () {

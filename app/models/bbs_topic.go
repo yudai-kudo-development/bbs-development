@@ -1,13 +1,13 @@
 package models
 
 import (
-	"fmt"
-	"net/http"
-	"strings"
 	"database/sql"
+	"fmt"
 	"log"
-	"time"
+	"net/http"
 	"strconv"
+	"strings"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -110,27 +110,28 @@ func GetIndividualTopic (id int) (Topic, error) {
 	return topic, err
 }
 
-func PostTopics (w http.ResponseWriter, r *http.Request) (err1 error, err2 error) {
-	Db, err1 := sql.Open("postgres", connStr)
-	if err1 != nil {
-		log.Fatal(err1)
+func PostTopics (w http.ResponseWriter, r *http.Request, user_id *int ) (err error) {
+	Db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err)
 	}
 	defer Db.Close()
 	
 	if r.Method == "POST" {
+		userId := user_id
 		title := r.FormValue("title")
 		description := r.FormValue("description")
 		category := r.FormValue("category")
 	
-		insert, err2 := Db.Prepare("INSERT INTO bbs_topics(topic_title, topic_description, topic_category) VALUES ($1,$2,$3)")
-		if err2 != nil {
-			fmt.Println(err2)
+		insert, err := Db.Prepare("INSERT INTO bbs_topics(topic_title, topic_description, topic_category, bbs_user_id) VALUES ($1,$2,$3,$4)")
+		if err != nil {
+			fmt.Println(err)
 		}
 	
-		insert.Exec(title, description, category)
+		insert.Exec(title, description, category, userId)
 	} 
 
-	return err1,err2
+	return err
 }
 
 func GetTopics (w http.ResponseWriter, r *http.Request) (Topics []Topic, err error) {

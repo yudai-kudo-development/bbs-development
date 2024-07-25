@@ -1,15 +1,14 @@
 {{ define "content" }}
+    
     <h3>ようこそ, {{.Name}} さん</h3>
-    <div class="post">
-        <h3>Post Title 1</h3>
-        <p>Content of the first post.</p>
-        <p class="likes">Likes: 10</p>
-        <p class="date">Posted on: 2024-07-14</p>
+
+    <p>【{{.Name}} さんの最新投稿】</p>
+    {{ range .Topics}}
+    <div class="recent_topics">
+        <h3>タイトル：{{.Title}}</h3>
+        <p>説明：{{.Description}}</p>
+        <p>カテゴリー：{{.Category}}</p>
+        <p class="date">投稿日時：{{.CreatedAt}}</p>
     </div>
-    <div class="post">
-        <h3>Post Title 2</h3>
-        <p>Content of the second post.</p>
-        <p class="likes">Likes: 5</p>
-        <p class="date">Posted on: 2024-07-13</p>
-    </div>
+    {{end}}
 {{end}}

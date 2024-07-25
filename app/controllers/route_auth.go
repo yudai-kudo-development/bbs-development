@@ -31,13 +31,13 @@ func Signup (w http.ResponseWriter, r *http.Request) {
 }
 
 func Login (w http.ResponseWriter, r *http.Request) {
-	// _,err := session(w,r)
-	generateHTML(w, nil, "layout", "public_navbar", "login")
-	// if err != nil {
-	// 	generateHTML(w, nil, "layout", "public_navbar", "login")
-	// } else {
-	// 	http.Redirect(w,r,"/signup", 302)
-	// }
+	_ , err := session(r)
+
+	if err != nil {
+		generateHTML(w, nil, "layout", "login")
+	} else {
+		http.Redirect(w,r,"/signup", 302)
+	}
 }
 
 func Authenticate (w http.ResponseWriter, r *http.Request) {

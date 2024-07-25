@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"time"
 
@@ -10,7 +9,7 @@ import (
 )
 
 type User struct {
-	ID        int
+	ID        *int
 	UUID      string
 	Name      string
 	Email     string
@@ -63,10 +62,6 @@ func (sess *Session) CheckSession() (valid bool, err error) {
 
 	err = Db.QueryRow(cmd, sess.UUID).Scan(
 		&sess.ID, &sess.UUID,&sess.Email, &sess.UserID, &sess.CreatedAt)
-	
-	fmt.Println("DB挿入処理完了")
-	fmt.Println(err)
-	fmt.Println(sess.ID)
 
 	if err != nil {
 		valid = false
@@ -138,7 +133,7 @@ func (sess *Session) GetUserBySession() (user User, err error) {
 	return user,err
 }
 
-func GetUserWithTopics (user User, id int) (User, error) {
+func GetUserWithTopics (user User, id *int) (User, error) {
 
 	Db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -146,7 +141,7 @@ func GetUserWithTopics (user User, id int) (User, error) {
 	}
 	defer Db.Close()
 
-	bbs_topics := `SELECT id, topic_title, topic_description, topic_category, created_at FROM bbs_topics WHERE id = $1`
+	bbs_topics := `SELECT id, topic_title, topic_description, topic_category, created_at FROM bbs_topics WHERE bbs_user_id = $1`
 	rows, err := Db.Query(bbs_topics, id)
 	if err != nil {
 			return user, err
