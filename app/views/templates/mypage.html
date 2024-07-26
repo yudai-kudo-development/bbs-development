@@ -1,8 +1,8 @@
 {{ define "content" }}
     
-    <h3>ようこそ, {{.Name}} さん</h3>
+    <h3>ようこそ, {{.User.Name}} さん</h3>
 
-    <p>【{{.Name}} さんの最新投稿】</p>
+    <p>【{{.User.Name}} さんの最新投稿】</p>
     {{ range .Topics}}
     <div class="recent_topics">
         <h3>タイトル：{{.Title}}</h3>

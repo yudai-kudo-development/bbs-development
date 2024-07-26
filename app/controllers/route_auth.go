@@ -10,8 +10,22 @@ import (
 
 func Signup (w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		generateHTML(w, nil, "layout", "signup","public_navbar")
 
+		session, _ := session(r)
+		if &session != nil {
+			User, err := session.GetUserBySession()
+			if err != nil {
+				fmt.Println(err)
+			}
+	
+			data := map[string]interface{}{
+				"Topics": nil,
+				"User": User,
+			}
+			generateHTML(w, data, "layout", "signup","public_navbar")
+		} else {
+			generateHTML(w, nil, "layout", "signup","public_navbar")
+		}
 	} else if r.Method == "POST" {
 		err := r.ParseForm()
 		if err != nil {
@@ -31,13 +45,8 @@ func Signup (w http.ResponseWriter, r *http.Request) {
 }
 
 func Login (w http.ResponseWriter, r *http.Request) {
-	_ , err := session(r)
+	generateHTML(w, nil, "layout", "login")
 
-	if err != nil {
-		generateHTML(w, nil, "layout", "login")
-	} else {
-		http.Redirect(w,r,"/signup", 302)
-	}
 }
 
 func Authenticate (w http.ResponseWriter, r *http.Request) {

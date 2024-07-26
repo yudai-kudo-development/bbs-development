@@ -1,12 +1,12 @@
 {{define "content"}}
         <div class="topic">
-            <h3>{{.Title}}</h3>
+            <h3>{{.Topics.Title}}</h3>
             <div class="recent_topics">
-                <p>{{.CreatedAt}} {{.Category}}</a></p>
-                <p>タイトル説明: {{.Description}}</p>
+                <p>{{.Topics.CreatedAt}} {{.Topics.Category}}</a></p>
+                <p>タイトル説明: {{.Topics.Description}}</p>
             </div>
         </div>
-        <form action="/submit_reply/{{.ID}}" method="post" enctype="multipart/form-data">
+        <form action="/submit_reply/{{.Topics.ID}}" method="post" enctype="multipart/form-data">
             <div>
                 <label for="name">名前:</label>
                 <input type="text" id="name" name="name" required>
@@ -21,12 +21,16 @@
         </form>
         <div class="replies">
             <h2>返信</h2>
-            {{range .Replies}}
-            <div class="reply">
-                <p><strong>返信者:</strong>{{.Name}}</p>
-                <p><strong>返信内容:</strong> {{.Content}}</p>
-                <p><strong>返信時間:</strong> {{.CreatedAt}}</p>
-            </div>
+            {{ if gt (len .Replies) 0 }}
+                {{range .Replies}}
+                    <div class="reply">
+                        <p><strong>返信者:</strong>{{.Replies.Name}}</p>
+                        <p><strong>返信内容:</strong> {{.Replies.Content}}</p>
+                        <p><strong>返信時間:</strong> {{.Replies.CreatedAt}}</p>
+                    </div>
+                {{end}}    
+            {{ else }}    
+                <p>まだ返信はありません。</p>
             {{end}}
         </div>
 {{end}}

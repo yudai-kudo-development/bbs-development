@@ -133,7 +133,7 @@ func (sess *Session) GetUserBySession() (user User, err error) {
 	return user,err
 }
 
-func GetUserWithTopics (user User, id *int) (User, error) {
+func GetTopicsWithUser (user User, id *int) (Topics []Topic, err error) {
 
 	Db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -141,25 +141,31 @@ func GetUserWithTopics (user User, id *int) (User, error) {
 	}
 	defer Db.Close()
 
+	topic := Topic{}
 	bbs_topics := `SELECT id, topic_title, topic_description, topic_category, created_at FROM bbs_topics WHERE bbs_user_id = $1`
+	err = Db.QueryRow(bbs_topics, id).Scan(&topic.ID, &topic.Title, &topic.Description, &topic.Category, &topic.CreatedAt)
+
 	rows, err := Db.Query(bbs_topics, id)
 	if err != nil {
-			return user, err
+		log.Fatalln(err)
 	}
-	defer rows.Close()
-
 	for rows.Next() {
-			var topic Topic
-			err := rows.Scan(&topic.ID, &topic.Title, &topic.Description, &topic.Category, &topic.CreatedAt)
-			if err != nil {
-					return user, err
-			}
-			user.Topics = append(user.Topics, topic)
+
+		err = rows.Scan(
+			&topic.ID,
+			&topic.Title,
+			&topic.Description,
+			&topic.Category,
+			&topic.CreatedAt,
+		)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		Topics = append(Topics, topic)
 	}
 
-	if err := rows.Err(); err != nil {
-		return user, err
-	}
+	rows.Close()
 
-	return user, err
+	return Topics, err
 }

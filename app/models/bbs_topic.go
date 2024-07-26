@@ -172,7 +172,7 @@ func GetTopics (w http.ResponseWriter, r *http.Request) (Topics []Topic, err err
 	}
 	for rows.Next() {
 		var topic Topic
-        var createdAt time.Time
+    var createdAt time.Time
 
 		weekday := strings.NewReplacer(
 			"Sun", "日",
