@@ -105,7 +105,7 @@ func PostTopic (w http.ResponseWriter, r *http.Request) () {
 		http.Redirect(w, r, "/", 302)
 		
 	} else {
-		var user_id *int
+		var user_id int
 		
 		err := models.PostTopics(w, r, user_id)
 		if err != nil {

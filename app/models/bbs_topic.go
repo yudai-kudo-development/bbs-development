@@ -3,25 +3,29 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	//"os"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+	"os"
+	"gorm.io/gorm"
+	"gorm.io/driver/postgres"
+	"github.com/joho/godotenv"
 
 	_ "github.com/lib/pq"
 )
 
-type Topic struct {
+type bbs_topic struct {
     ID          int
-    Title       string
-    Description string
-		Category   string
-    CreatedAt   string
-    Replies     []Reply
+    Topic_title   string
+    Topic_description string
+		Topic_category    string
+    CreatedAt   time.Time
 }
 
-func GetRecentTopics (w http.ResponseWriter, r *http.Request) (Topics []Topic, err error) {
+func GetRecentTopics (w http.ResponseWriter, r *http.Request) (Topics []bbs_topic, err error) {
 	
 	// TOOD:この処理をまとめて関数化できないか検討
 	Db, err := sql.Open("postgres", connStr)
@@ -36,32 +40,32 @@ func GetRecentTopics (w http.ResponseWriter, r *http.Request) (Topics []Topic, e
 		log.Fatalln(err)
 	}
 	for rows.Next() {
-		var topic Topic
+		var topic bbs_topic
     var createdAt time.Time
 
-		weekday := strings.NewReplacer(
-			"Sun", "日",
-			"Mon", "月",
-			"Tue", "火",
-			"Wed", "水",
-			"Thu", "木",
-			"Fri", "金",
-			"Sat", "土",
-		)
+		// weekday := strings.NewReplacer(
+		// 	"Sun", "日",
+		// 	"Mon", "月",
+		// 	"Tue", "火",
+		// 	"Wed", "水",
+		// 	"Thu", "木",
+		// 	"Fri", "金",
+		// 	"Sat", "土",
+		// )
 
 		err = rows.Scan(
 			&topic.ID,
-			&topic.Title,
-			&topic.Description,
-			&topic.Category,
+			&topic.Topic_title,
+			&topic.Topic_description,
+			&topic.Topic_category,
 			&createdAt,
 		)
 		if err != nil {
 			log.Fatalln(err)
 		}
 		
-		formattedDate := weekday.Replace(createdAt.Format("2006年1月2日(Mon) 15:04:05"))
-		topic.CreatedAt = formattedDate
+		// formattedDate := weekday.Replace(createdAt.Format("2006年1月2日(Mon) 15:04:05"))
+		// // topic.CreatedAt = formattedDate
 
 		Topics = append(Topics, topic)
 	}
@@ -71,9 +75,9 @@ func GetRecentTopics (w http.ResponseWriter, r *http.Request) (Topics []Topic, e
 	return Topics, err
 }
 
-func GetIndividualTopic (id int) (Topic, error) {
+func GetIndividualTopic (id int) (bbs_topic, error) {
 	
-	var topic Topic
+	var topic bbs_topic
 
 	Db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -82,7 +86,7 @@ func GetIndividualTopic (id int) (Topic, error) {
 	defer Db.Close()
 
 	bbs_topic := `SELECT id, topic_title, topic_description, topic_category, created_at FROM bbs_topics WHERE id = $1`
-	err = Db.QueryRow(bbs_topic, id).Scan(&topic.ID, &topic.Title, &topic.Description, &topic.Category, &topic.CreatedAt)
+	err = Db.QueryRow(bbs_topic, id).Scan(&topic.ID, &topic.Topic_title, &topic.Topic_description, &topic.Topic_category, &topic.CreatedAt)
 	if err != nil {
 			return topic, err
 	}
@@ -94,14 +98,14 @@ func GetIndividualTopic (id int) (Topic, error) {
 	}
 	defer rows.Close()
 
-	for rows.Next() {
-			var reply Reply
-			err := rows.Scan(&reply.ID, &reply.TopicID, &reply.Name, &reply.Content, &reply.CreatedAt)
-			if err != nil {
-					return topic, err
-			}
-			topic.Replies = append(topic.Replies, reply)
-	}
+	// for rows.Next() {
+	// 		var reply Reply
+	// 		err := rows.Scan(&reply.ID, &reply.TopicID, &reply.Name, &reply.Content, &reply.CreatedAt)
+	// 		if err != nil {
+	// 				return topic, err
+	// 		}
+	// 		topic.Replies = append(topic.Replies, reply)
+	// }
 
 	if err := rows.Err(); err != nil {
 		return topic, err
@@ -110,31 +114,47 @@ func GetIndividualTopic (id int) (Topic, error) {
 	return topic, err
 }
 
-func PostTopics (w http.ResponseWriter, r *http.Request, user_id *int ) (err error) {
-	Db, err := sql.Open("postgres", connStr)
+func PostTopics (w http.ResponseWriter, r *http.Request, user_id int) (err error) {
+	
+	err = godotenv.Load(".env")
 	if err != nil {
-		log.Fatal(err)
-	}
-	defer Db.Close()
-	
-	if r.Method == "POST" {
-		userId := user_id
-		title := r.FormValue("title")
-		description := r.FormValue("description")
-		category := r.FormValue("category")
-	
-		insert, err := Db.Prepare("INSERT INTO bbs_topics(topic_title, topic_description, topic_category, bbs_user_id) VALUES ($1,$2,$3,$4)")
-		if err != nil {
-			fmt.Println(err)
-		}
-	
-		insert.Exec(title, description, category, userId)
+		fmt.Printf("読み込み出来ませんでした: %v", err)
 	} 
+	Db, err := gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{})
+	if err != nil {
+	panic("failed to connect database")
+	}
+
+	topic := bbs_topic{
+		ID: user_id,
+    Topic_title: r.FormValue("title"),
+    Topic_description: r.FormValue("description"),
+		Topic_category: r.FormValue("category"),
+	}
+
+	topic_pointer := Db.Create(&topic)
+	if topic_pointer.Error != nil {
+    panic("failed to insert record")
+	}
+
+	// if r.Method == "POST" {
+	// 	userId := user_id
+	// 	title := r.FormValue("title")
+	// 	description := r.FormValue("description")
+	// 	category := r.FormValue("category")
+	
+	// 	insert, err := Db.Prepare("INSERT INTO bbs_topics(topic_title, topic_description, topic_category, bbs_user_id) VALUES ($1,$2,$3,$4)")
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 	}
+	
+	// 	insert.Exec(title, description, category, userId)
+	// }
 
 	return err
 }
 
-func GetTopics (w http.ResponseWriter, r *http.Request) (Topics []Topic, err error) {
+func GetTopics (w http.ResponseWriter, r *http.Request) (Topics []bbs_topic, err error) {
 	
 	// TOOD:この処理をまとめて関数化できないか検討
 	Db, err := sql.Open("postgres", connStr)
@@ -171,32 +191,32 @@ func GetTopics (w http.ResponseWriter, r *http.Request) (Topics []Topic, err err
 		log.Fatalln(err)
 	}
 	for rows.Next() {
-		var topic Topic
+		var topic bbs_topic
     var createdAt time.Time
 
-		weekday := strings.NewReplacer(
-			"Sun", "日",
-			"Mon", "月",
-			"Tue", "火",
-			"Wed", "水",
-			"Thu", "木",
-			"Fri", "金",
-			"Sat", "土",
-		)
+		// weekday := strings.NewReplacer(
+		// 	"Sun", "日",
+		// 	"Mon", "月",
+		// 	"Tue", "火",
+		// 	"Wed", "水",
+		// 	"Thu", "木",
+		// 	"Fri", "金",
+		// 	"Sat", "土",
+		// )
 
 		err = rows.Scan(
 			&topic.ID,
-			&topic.Title,
-			&topic.Description,
-			&topic.Category,
+			&topic.Topic_title,
+			&topic.Topic_description,
+			&topic.Topic_category,
 			&createdAt,
 		)
 		if err != nil {
 			log.Fatalln(err)
 		}
 		
-		formattedDate := weekday.Replace(createdAt.Format("2006年1月2日(Mon) 15:04:05"))
-		topic.CreatedAt = formattedDate
+		// formattedDate := weekday.Replace(createdAt.Format("2006年1月2日(Mon) 15:04:05"))
+		// topic.CreatedAt = formattedDate
 
 		Topics = append(Topics, topic)
 	}

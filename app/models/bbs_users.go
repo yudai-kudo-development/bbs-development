@@ -4,18 +4,19 @@ import (
 	"database/sql"
 	"log"
 	"time"
+	//"gorm.io/gorm"
 
 	_ "github.com/lib/pq"
 )
 
 type User struct {
-	ID        *int
+	ID        int
 	UUID      string
 	Name      string
 	Email     string
 	PassWord  string
 	CreatedAt time.Time
-	Topics    []Topic
+	Topics    []bbs_topic
 }
 
 type Session struct {
@@ -133,7 +134,7 @@ func (sess *Session) GetUserBySession() (user User, err error) {
 	return user,err
 }
 
-func GetTopicsWithUser (user User, id *int) (Topics []Topic, err error) {
+func GetTopicsWithUser (user User, id int) (Topics []bbs_topic, err error) {
 
 	Db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -141,9 +142,9 @@ func GetTopicsWithUser (user User, id *int) (Topics []Topic, err error) {
 	}
 	defer Db.Close()
 
-	topic := Topic{}
+	topic := bbs_topic{}
 	bbs_topics := `SELECT id, topic_title, topic_description, topic_category, created_at FROM bbs_topics WHERE bbs_user_id = $1`
-	err = Db.QueryRow(bbs_topics, id).Scan(&topic.ID, &topic.Title, &topic.Description, &topic.Category, &topic.CreatedAt)
+	//err = Db.QueryRow(bbs_topics, id).Scan(&topic.ID, &topic.bbs_title, &topic.Description, &topic.Category, &topic.CreatedAt)
 
 	rows, err := Db.Query(bbs_topics, id)
 	if err != nil {
@@ -153,9 +154,9 @@ func GetTopicsWithUser (user User, id *int) (Topics []Topic, err error) {
 
 		err = rows.Scan(
 			&topic.ID,
-			&topic.Title,
-			&topic.Description,
-			&topic.Category,
+			// &topic.bbs_title,
+			// &topic.Description,
+			// &topic.Category,
 			&topic.CreatedAt,
 		)
 		if err != nil {

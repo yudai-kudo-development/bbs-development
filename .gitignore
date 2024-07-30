@@ -2,3 +2,4 @@ config.ini
 go.mod
 go.sum
 webapp.log
+.env
