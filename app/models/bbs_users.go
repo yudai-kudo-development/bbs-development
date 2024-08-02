@@ -4,19 +4,22 @@ import (
 	"database/sql"
 	"log"
 	"time"
-	//"gorm.io/gorm"
+	"fmt"
+	"os"
+	"gorm.io/gorm"
+	"gorm.io/driver/postgres"
+	"github.com/joho/godotenv"
 
 	_ "github.com/lib/pq"
 )
 
-type User struct {
+type BbsUser struct {
 	ID        int
 	UUID      string
 	Name      string
 	Email     string
-	PassWord  string
+	Password  string
 	CreatedAt time.Time
-	Topics    []BbsTopic
 }
 
 type Session struct {
@@ -27,26 +30,29 @@ type Session struct {
 	CreatedAt time.Time
 }
 
-func (u *User) CreateUser() (err error) {
+func (u *BbsUser) CreateUser() (err error) {
 
-	Db, err := sql.Open("postgres", connStr)
+	err = godotenv.Load(".env")
 	if err != nil {
-		log.Fatal(err)
-	}
-	defer Db.Close()
-
-	cmd := `insert into bbs_users (
-	uuid,
-	name,
-	email,
-	password,
-	created_at ) values ($1, $2, $3, $4, $5)`
-
-	_, err = Db.Exec(cmd, createUUID(), u.Name, u.Email, Encrypt(u.PassWord),time.Now())
-
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	} 
+	Db, err := gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{})
 	if err != nil {
-		log.Fatalln(err)
+		panic("failed to connect database")
 	}
+
+	user := BbsUser{
+		Name:      u.Name,
+		Email:     u.Email,
+		Password:  Encrypt(u.Password),
+		CreatedAt: time.Now(),
+	}
+
+	topic_pointer := Db.Create(&user)
+	if topic_pointer.Error != nil {
+		panic("failed to insert record")
+	}
+
 	return err
 }
 
@@ -76,22 +82,22 @@ func (sess *Session) CheckSession() (valid bool, err error) {
 	return valid, err
 }
 
-func GetUserByEmail (email string) (user User,err error) {
+func GetUserByEmail (email string) (user BbsUser,err error) {
 	Db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer Db.Close()
 
-	user = User{}
+	user = BbsUser{}
 	cmd := `select id, uuid, name, email, password, created_at
 	from bbs_users where email = $1`
-	err = Db.QueryRow(cmd, email).Scan(&user.ID, &user.UUID,&user.Name,&user.Email,&user.PassWord,&user.CreatedAt)
+	err = Db.QueryRow(cmd, email).Scan(&user.ID, &user.UUID,&user.Name,&user.Email,&user.Password,&user.CreatedAt)
 
 	return user,err
 }
 
-func (u *User) CreateSession () (session Session,err error) {
+func (u *BbsUser) CreateSession () (session Session,err error) {
 	Db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
@@ -118,7 +124,7 @@ func (u *User) CreateSession () (session Session,err error) {
 	return session,err
 }
 
-func (sess *Session) GetUserBySession() (user User, err error) {
+func (sess *Session) GetUserBySession() (user BbsUser, err error) {
 
 	Db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -126,7 +132,7 @@ func (sess *Session) GetUserBySession() (user User, err error) {
 	}
 	defer Db.Close()
 
-	user = User{}
+	user = BbsUser{}
 	cmd := `select id, uuid, name, email, created_at
 	from bbs_users where id = $1`
 	err = Db.QueryRow(cmd, sess.UserID).Scan(&user.ID, &user.UUID, &user.Name, &user.Email, &user.CreatedAt)
@@ -134,7 +140,7 @@ func (sess *Session) GetUserBySession() (user User, err error) {
 	return user,err
 }
 
-func GetTopicsWithUser (user User, id int) (Topics []BbsTopic, err error) {
+func GetTopicsWithUser (user BbsUser, id int) (Topics []BbsTopic, err error) {
 
 	Db, err := sql.Open("postgres", connStr)
 	if err != nil {

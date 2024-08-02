@@ -25,9 +25,9 @@
     </form>
     {{range .}}
     <div class="recent_topics">
-        <p><a href="http://localhost:8081/topics/{{.ID}}">タイトル: {{.Title}} カテゴリー: {{.Category}}</a></p>
+        <p><a href="http://localhost:8081/topics/{{.ID}}">タイトル: {{.TopicTitle}} カテゴリー: {{.TopicCategory}}</a></p>
         <p>投稿日: {{.CreatedAt}}</p>
-        <p>タイトル説明: {{.Description}}</p>
+        <p>タイトル説明: {{.TopicDescription}}</p>
     </div>
     {{end}}
 </div>

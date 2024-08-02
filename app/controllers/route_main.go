@@ -170,6 +170,7 @@ func SearchTopic (w http.ResponseWriter, r *http.Request) () {
 			fmt.Println(err)
 		}
 
+		fmt.Println(Topics)
 		generateHTML(w, Topics, "layout", "searchtopic")
 	}
 }

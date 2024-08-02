@@ -1,12 +1,12 @@
 package models
 
 import (
-	"database/sql"
+	//"database/sql"
 	"fmt"
-	"log"
+	//"log"
 	"net/http"
-	"strconv"
-	"strings"
+	// "strconv"
+	// "strings"
 	"time"
 	"os"
 	"gorm.io/gorm"
@@ -20,11 +20,11 @@ type BbsTopic struct {
   	ID               int
   	TopicTitle       string
   	TopicDescription string
-		TopicCategory    string
+	TopicCategory    string
   	BbsUserId        int
-		CreatedAt        time.Time
-		UpdatedAt        time.Time
-		BbsReplies       []BbsReply
+	CreatedAt        time.Time
+	UpdatedAt        time.Time
+	BbsReplies       []BbsReply
 }
 
 func GetRecentTopics () (Topics []BbsTopic, err error) {
@@ -105,8 +105,8 @@ func PostTopics (w http.ResponseWriter, r *http.Request, user_id int) (err error
 
 	if r.Method == "POST" {
 		topic := BbsTopic{
-  	  TopicTitle: r.FormValue("title"),
-  	  TopicDescription: r.FormValue("description"),
+  	  		TopicTitle: r.FormValue("title"),
+  	  		TopicDescription: r.FormValue("description"),
 			TopicCategory: r.FormValue("category"),
 			BbsUserId: user_id,
 		}
@@ -122,71 +122,35 @@ func PostTopics (w http.ResponseWriter, r *http.Request, user_id int) (err error
 
 func GetTopics (w http.ResponseWriter, r *http.Request) (Topics []BbsTopic, err error) {
 	
-	// TOOD:この処理をまとめて関数化できないか検討
-	Db, err := sql.Open("postgres", connStr)
+	err = godotenv.Load(".env")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	} 
+	Db, err := gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{})
+	if err != nil {
+	panic("failed to connect database")
 	}
-	defer Db.Close()
 
 	// TODO:Goで動的SQLを実装する仕組みがあればそちらで実装したい
 	title := r.FormValue("title")
 	description := r.FormValue("description")
 	category := r.FormValue("category")
 
-	var conditions []string
-	var params []interface{}
+	var topics []BbsTopic
+	query := Db.Where("1=1")
+	fmt.Printf("%v", query)
 
 	if title != "" {
-		conditions = append(conditions, "topic_title ILIKE $"+strconv.Itoa(len(conditions)+1))
-		params = append(params, "%"+title+"%")
+		query = query.Where("topic_title LIKE ?", "%"+title+"%")
 	}
 	if description != "" {
-		conditions = append(conditions, "topic_description ILIKE $"+strconv.Itoa(len(conditions)+1))
-		params = append(params, "%"+description+"%")
+		query = query.Where("topic_description LIKE ?", "%"+description+"%")
 	}
 	if category != "" {
-		conditions = append(conditions, "topic_category ILIKE $"+strconv.Itoa(len(conditions)+1))
-		params = append(params, "%"+category+"%")
+		query = query.Where("topic_category LIKE ?", "%"+category+"%")
 	}
 
-	cmd := "SELECT id, topic_title, topic_description, topic_category, created_at FROM bbs_topics WHERE " + strings.Join(conditions, " OR ")
-	
-	rows, err := Db.Query(cmd, params...)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	for rows.Next() {
-		var topic BbsTopic
+	query.Find(&topics)
 
-		// weekday := strings.NewReplacer(
-		// 	"Sun", "日",
-		// 	"Mon", "月",
-		// 	"Tue", "火",
-		// 	"Wed", "水",
-		// 	"Thu", "木",
-		// 	"Fri", "金",
-		// 	"Sat", "土",
-		// )
-
-		err = rows.Scan(
-			&topic.ID,
-			&topic.TopicTitle,
-			&topic.TopicDescription,
-			&topic.TopicCategory,
-			&topic.CreatedAt,
-		)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		
-		// formattedDate := weekday.Replace(createdAt.Format("2006年1月2日(Mon) 15:04:05"))
-		// topic.CreatedAt = formattedDate
-
-		Topics = append(Topics, topic)
-	}
-
-	rows.Close()
-
-	return Topics, err
+	return topics, err
 }

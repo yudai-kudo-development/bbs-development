@@ -31,10 +31,10 @@ func Signup (w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
-		user := models.User {
+		user := models.BbsUser {
 			Name: r.PostFormValue("name"),
 			Email: r.PostFormValue("email"),
-			PassWord: r.PostFormValue("password"),
+			Password: r.PostFormValue("password"),
 		}
 		if err := user.CreateUser(); err != nil {
 			log.Println(err)
@@ -56,7 +56,7 @@ func Authenticate (w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 		http.Redirect(w,r, "/login", 302)
 	}
-	if user.PassWord == models.Encrypt(r.PostFormValue("password")) {
+	if user.Password == models.Encrypt(r.PostFormValue("password")) {
 		session, err := user.CreateSession()
 		if err != nil {
 			log.Println(err)
