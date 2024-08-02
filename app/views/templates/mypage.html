@@ -1,0 +1,14 @@
+{{ define "content" }}
+    
+    <h3>ようこそ, {{.User.Name}} さん</h3>
+
+    <p>【{{.User.Name}} さんの最新投稿】</p>
+    {{ range .Topics}}
+    <div class="recent_topics">
+        <h3>タイトル：{{.Title}}</h3>
+        <p>説明：{{.Description}}</p>
+        <p>カテゴリー：{{.Category}}</p>
+        <p class="date">投稿日時：{{.CreatedAt}}</p>
+    </div>
+    {{end}}
+{{end}}

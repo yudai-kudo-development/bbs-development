@@ -11,8 +11,6 @@ import (
 )
 
 func main () {
-	//fmt.Println("サーバー起動処理始めます")
 	controllers.StartMainServer()
-
 }
 

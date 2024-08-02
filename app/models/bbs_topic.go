@@ -1,75 +1,156 @@
 package models
 
 import (
-	// "fmt"
-	// "log"
+	//"database/sql"
+	"fmt"
+	//"log"
 	"net/http"
-	"strings"
 	// "strconv"
-	// "todo_app/app/models"
-	// "path/filepath"
-	"database/sql"
-	"log"
+	// "strings"
 	"time"
+	"os"
+	"gorm.io/gorm"
+	"gorm.io/driver/postgres"
+	"github.com/joho/godotenv"
 
 	_ "github.com/lib/pq"
 )
 
-var Db *sql.DB
-// TODO:configに接続情報をまとめる
-var connStr = "user=yudai.kudo dbname=bbs_development sslmode=disable"
-
-type Topic struct {
-	Title string
-	Description string
-	Category string
-	FormattedCreatedAt string
+type BbsTopic struct {
+  	ID               int
+  	TopicTitle       string
+  	TopicDescription string
+	TopicCategory    string
+  	BbsUserId        int
+	CreatedAt        time.Time
+	UpdatedAt        time.Time
+	BbsReplies       []BbsReply
 }
 
-func GetTopics (w http.ResponseWriter, r *http.Request) (Topics []Topic, err error) {
+func GetRecentTopics () (Topics []BbsTopic, err error) {
 	
-	Db, err := sql.Open("postgres", connStr)
+	err = godotenv.Load(".env")
 	if err != nil {
-		log.Fatal(err)
-	}
-	defer Db.Close()
-
-	cmd := `SELECT topic_title, topic_description, topic_category, created_at FROM bbs_topics ORDER BY created_at DESC LIMIT 5`
-	rows, err := Db.Query(cmd)
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	} 
+	Db, err := gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{})
 	if err != nil {
-		log.Fatalln(err)
+	panic("failed to connect database")
 	}
-	for rows.Next() {
-		var topic Topic
-        var createdAt time.Time
 
-		weekday := strings.NewReplacer(
-			"Sun", "日",
-			"Mon", "月",
-			"Tue", "火",
-			"Wed", "水",
-			"Thu", "木",
-			"Fri", "金",
-			"Sat", "土",
-		)
+	var topic []BbsTopic
+	topic_pointer := Db.Order("id desc").Limit(5).Find(&topic)
 
-		err = rows.Scan(
-			&topic.Title,
-			&topic.Description,
-			&topic.Category,
-			&createdAt,
-		)
-		if err != nil {
-			log.Fatalln(err)
+	if topic_pointer.Error != nil {
+		panic("failed to insert record")
+	}
+
+	return topic,err
+}
+
+func GetIndividualTopic (id int) ([]BbsTopic, error) {
+
+	err = godotenv.Load(".env")
+	if err != nil {
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	} 
+	Db, err := gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{})
+	if err != nil {
+	panic("failed to connect database")
+	}
+
+	var topic []BbsTopic
+	err = Db.Preload("BbsReplies").First(&topic, id).Error
+	fmt.Println(topic)
+	// bbs_topic := `SELECT id, topic_title, topic_description, topic_category, created_at FROM bbs_topics WHERE id = $1`
+	// // err = Db.QueryRow(bbs_topic, id).Scan(&topic.ID, &topic.Topic_title, &topic.Topic_description, &topic.Topic_category)
+	// if err != nil {
+	// 		return topic, err
+	// }
+
+	// // bbs_replies := `SELECT id, bbs_topic_id, reply_name, reply_content, created_at FROM bbs_replies WHERE bbs_topic_id = $1`
+	// // rows, err := Db.Query(bbs_replies, id)
+	// // if err != nil {
+	// // 		return topic, err
+	// // }
+	// // defer rows.Close()
+
+	// // for rows.Next() {
+	// // 		var reply Reply
+	// // 		err := rows.Scan(&reply.ID, &reply.TopicID, &reply.Name, &reply.Content, &reply.CreatedAt)
+	// // 		if err != nil {
+	// // 				return topic, err
+	// // 		}
+	// // 		topic.Replies = append(topic.Replies, reply)
+	// // }
+
+	// // if err := rows.Err(); err != nil {
+	// // 	return topic, err
+	// // }
+
+	return topic, err
+
+}
+
+func PostTopics (w http.ResponseWriter, r *http.Request, user_id int) (err error) {
+	
+	err = godotenv.Load(".env")
+	if err != nil {
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	} 
+	Db, err := gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{})
+	if err != nil {
+	panic("failed to connect database")
+	}
+
+	if r.Method == "POST" {
+		topic := BbsTopic{
+  	  		TopicTitle: r.FormValue("title"),
+  	  		TopicDescription: r.FormValue("description"),
+			TopicCategory: r.FormValue("category"),
+			BbsUserId: user_id,
 		}
-		formattedDate := weekday.Replace(createdAt.Format("2006年1月2日(Mon) 15:04:05"))
-		topic.FormattedCreatedAt = formattedDate
-
-		Topics = append(Topics, topic)
+	 
+		topic_pointer := Db.Create(&topic)
+		if topic_pointer.Error != nil {
+  	  panic("failed to insert record")
+		}
 	}
 
-	rows.Close()
+	return err
+}
 
-	return Topics, err
+func GetTopics (w http.ResponseWriter, r *http.Request) (Topics []BbsTopic, err error) {
+	
+	err = godotenv.Load(".env")
+	if err != nil {
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	} 
+	Db, err := gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{})
+	if err != nil {
+	panic("failed to connect database")
+	}
 
+	// TODO:Goで動的SQLを実装する仕組みがあればそちらで実装したい
+	title := r.FormValue("title")
+	description := r.FormValue("description")
+	category := r.FormValue("category")
+
+	var topics []BbsTopic
+	query := Db.Where("1=1")
+	fmt.Printf("%v", query)
+
+	if title != "" {
+		query = query.Where("topic_title LIKE ?", "%"+title+"%")
+	}
+	if description != "" {
+		query = query.Where("topic_description LIKE ?", "%"+description+"%")
+	}
+	if category != "" {
+		query = query.Where("topic_category LIKE ?", "%"+category+"%")
+	}
+
+	query.Find(&topics)
+
+	return topics, err
 }

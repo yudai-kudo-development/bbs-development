@@ -1,0 +1,38 @@
+{{define "content"}}
+    {{range .}}
+    <div class="topic">
+        <h3>{{.TopicTitle}}</h3>
+        <div class="recent_topics">
+            <p>{{.CreatedAt}} {{.TopicCategory}}</a></p>
+            <p>タイトル説明: {{.TopicDescription}}</p>
+        </div>
+    </div>
+    <form action="/submit_reply/{{.ID}}" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="name">名前:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="content"><br>返信内容:<br></label>
+            <textarea id="content" name="content" rows="4" cols="50" required></textarea>
+        </div>
+        <div>
+            <button type="submit">返信する</button>
+        </div>
+    </form>
+    <div class="replies">
+        <h2>返信</h2>
+        {{ if gt (len .BbsReplies) 0 }}
+            {{range .BbsReplies}}
+                <div class="reply">
+                    <p><strong>返信者:</strong>{{.ReplyName}}</p>
+                    <p><strong>返信内容:</strong> {{.ReplyContent}}</p>
+                    <p><strong>返信時間:</strong> {{.CreatedAt}}</p>
+                </div>
+            {{end}}    
+        {{ else }}    
+            <p>まだ返信はありません。</p>
+        {{end}}
+    </div>
+    {{end}}
+{{end}}
