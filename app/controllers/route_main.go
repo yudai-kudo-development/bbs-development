@@ -15,28 +15,30 @@ var Db *sql.DB
 
 func Top (w http.ResponseWriter, r *http.Request) () {
 	
-	Topics, err := models.GetRecentTopics(w,r)
+	Topics, err := models.GetRecentTopics()
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	session, _ := session(r)
+	generateHTML(w, Topics, "layout", "top")
 
-	if &session != nil {
-		User, err := session.GetUserBySession()
-		if err != nil {
-			fmt.Println(err)
-		}
+	// session, _ := session(r)
 
-		data := map[string]interface{}{
-			"Topics": Topics,
-			"User": User,
-		}
+	// if &session != nil {
+	// 	User, err := session.GetUserBySession()
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 	}
 
-		generateHTML(w, data, "layout", "top")
-	} else {
-		generateHTML(w, Topics, "layout", "top")
-	}
+	// 	data := map[string]interface{}{
+	// 		"Topics": Topics,
+	// 		"User": User,
+	// 	}
+
+	// 	generateHTML(w, data, "layout", "top")
+	// } else {
+	// 	generateHTML(w, Topics, "layout", "top")
+	// }
 }
 
 func GetTopic (w http.ResponseWriter, r *http.Request) () {
@@ -57,35 +59,35 @@ func GetTopic (w http.ResponseWriter, r *http.Request) () {
 		fmt.Println(err)
 	}
 
-	Replies, err := models.GetReplies(id)
-	if err != nil {
-		fmt.Println(err)
-	}
+	generateHTML(w, Topics, "layout", "individualtopic")
 
-	session, _ := session(r)
+	// Replies, err := models.GetReplies(id)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 
-	if &session != nil {
-		User, err := session.GetUserBySession()
-		if err != nil {
-			fmt.Println(err)
-		}
+	// session, _ := session(r)
 
-		data := map[string]interface{}{
-			"Topics": Topics,
-			"Replies":Replies,
-			"User": User,
-		}
+	// if &session != nil {
+	// 	User, err := session.GetUserBySession()
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 	}
 
-		fmt.Println("%v", data)
-		generateHTML(w, data, "layout", "individualtopic")
-	} else {
-		data := map[string]interface{}{
-			"Topics": Topics,
-			"Replies":Replies,
-		}
-		fmt.Println("%v", data)
-		generateHTML(w, data, "layout", "individualtopic")
-	}
+	// 	data := map[string]interface{}{
+	// 		"Topics": Topics,
+	// 		"Replies":Replies,
+	// 		"User": User,
+	// 	}
+
+	// 	generateHTML(w, data, "layout", "individualtopic")
+	// } else {
+	// 	data := map[string]interface{}{
+	// 		"Topics": Topics,
+	// 		"Replies":Replies,
+	// 	}
+	// 	generateHTML(w, data, "layout", "individualtopic")
+	// }
 }
 
 func PostTopic (w http.ResponseWriter, r *http.Request) () {

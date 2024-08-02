@@ -9,42 +9,52 @@ import (
 	"log"
 	"time"
 	//"strings"
+	"os"
+	"gorm.io/gorm"
+	"gorm.io/driver/postgres"
+	"github.com/joho/godotenv"
 
 	_ "github.com/lib/pq"
 )
 
-type Reply struct {
-    ID        *int
-    TopicID   *int
-    Name      *string
-    Content   *string
-    CreatedAt *string
+type BbsReply struct {
+    ID           int
+    BbsTopicID   int
+    ReplyName    string
+    ReplyContent string
+    CreatedAt    time.Time
+		UpdatedAt    time.Time
 }
 
 func PostReply (id int , r *http.Request) (err error) {
-	Db, err := sql.Open("postgres", connStr)
+	err = godotenv.Load(".env")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	} 
+	Db, err := gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{})
+	if err != nil {
+	panic("failed to connect database")
 	}
-	defer Db.Close()
-	
-		bbs_topic_id := id
-		title := r.FormValue("name")
-		description := r.FormValue("content")
-	
-		insert, err := Db.Prepare("INSERT INTO bbs_replies(bbs_topic_id, reply_name, reply_content) VALUES ($1,$2,$3)")
-		if err != nil {
-			fmt.Println(err)
+
+	if r.Method == "POST" {
+		reply := BbsReply{
+  	  ReplyName: r.FormValue("name"),
+  	  ReplyContent: r.FormValue("content"),
+			BbsTopicID: id,
 		}
-	
-		insert.Exec(bbs_topic_id, title, description)
+	 
+		topic_pointer := Db.Create(&reply)
+		if topic_pointer.Error != nil {
+  	  panic("failed to insert record")
+		}
+	}
 
 	return err
 }
 
-func GetReplies (id int) (Replies []Reply, err error) {
+func GetReplies (id int) (Replies []BbsReply, err error) {
 	
-	var reply Reply
+	var reply BbsReply
 	var createdAt time.Time
 
 	Db, err := sql.Open("postgres", connStr)
@@ -55,14 +65,14 @@ func GetReplies (id int) (Replies []Reply, err error) {
 
 	cmd := `SELECT reply_name, reply_content, created_at FROM bbs_replies WHERE bbs_topic_id = $1`
 	err = Db.QueryRow(cmd, id).Scan(
-		&reply.Name,
-		&reply.Content,
+		&reply.ReplyName,
+		&reply.ReplyContent,
 		&createdAt,
 	)
 
 	if err != nil {
 		fmt.Println(err)
-		return []Reply{}, err
+		return []BbsReply{}, err
 	} else {
 		Replies = append(Replies, reply)
 		return Replies, err

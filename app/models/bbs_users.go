@@ -16,7 +16,7 @@ type User struct {
 	Email     string
 	PassWord  string
 	CreatedAt time.Time
-	Topics    []bbs_topic
+	Topics    []BbsTopic
 }
 
 type Session struct {
@@ -134,7 +134,7 @@ func (sess *Session) GetUserBySession() (user User, err error) {
 	return user,err
 }
 
-func GetTopicsWithUser (user User, id int) (Topics []bbs_topic, err error) {
+func GetTopicsWithUser (user User, id int) (Topics []BbsTopic, err error) {
 
 	Db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -142,7 +142,7 @@ func GetTopicsWithUser (user User, id int) (Topics []bbs_topic, err error) {
 	}
 	defer Db.Close()
 
-	topic := bbs_topic{}
+	topic := BbsTopic{}
 	bbs_topics := `SELECT id, topic_title, topic_description, topic_category, created_at FROM bbs_topics WHERE bbs_user_id = $1`
 	//err = Db.QueryRow(bbs_topics, id).Scan(&topic.ID, &topic.bbs_title, &topic.Description, &topic.Category, &topic.CreatedAt)
 
@@ -157,7 +157,6 @@ func GetTopicsWithUser (user User, id int) (Topics []bbs_topic, err error) {
 			// &topic.bbs_title,
 			// &topic.Description,
 			// &topic.Category,
-			&topic.CreatedAt,
 		)
 		if err != nil {
 			log.Fatalln(err)

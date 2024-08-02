@@ -27,12 +27,12 @@
     </form>
     <div id="recent_topics">
         <h3>最新お題一覧</h3>
-            {{range .Topics}}
+        {{range .}}
             <div class="recent_topics">
-                <p><a href="http://localhost:8081/topics/{{.ID}}">タイトル: {{.Title}} カテゴリー: {{.Category}}</a></p>
+                <p><a href="http://localhost:8081/topics/{{.ID}}">タイトル: {{.TopicTitle}} カテゴリー: {{.TopicCategory}}</a></p>
                 <p>投稿日: {{.CreatedAt}}</p>
-                <p>タイトル説明: {{.Description}}</p>
+                <p>タイトル説明: {{.TopicDescription}}</p>
             </div>
-            {{end}}
+        {{end}}
     </div>
 {{end}}
