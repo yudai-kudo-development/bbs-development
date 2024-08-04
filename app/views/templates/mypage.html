@@ -1,14 +1,51 @@
 {{ define "content" }}
-    
-    <h3>ようこそ, {{.User.Name}} さん</h3>
+    {{range .}}
+    <h3>ようこそ, {{.Name}} さん</h3>
 
-    <p>【{{.User.Name}} さんの最新投稿】</p>
-    {{ range .Topics}}
+    <p>【{{.Name}} さんの最新投稿】</p>
+    {{range .BbsTopics}}
     <div class="recent_topics">
-        <h3>タイトル：{{.Title}}</h3>
-        <p>説明：{{.Description}}</p>
-        <p>カテゴリー：{{.Category}}</p>
+        <h3>タイトル：{{.TopicTitle}}</h3>
+        <p>説明：{{.TopicDescription}}</p>
+        <p>カテゴリー：{{.TopicCategory}}</p>
         <p class="date">投稿日時：{{.CreatedAt}}</p>
+
+        <!-- 編集ボタン -->
+        <button onclick="toggleEditForm('{{.ID}}')">編集</button>
+        <!-- 削除ボタン -->
+        <button type="button" onclick="confirmDeletion('{{.ID}}')">削除</button>
+        
+        <!-- 編集フォーム -->
+        <form id="edit-form-{{.ID}}" class="edit-form" action="/update_topic" method="post">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <div>
+                <label for="title-{{.ID}}">タイトル:</label>
+                <input type="text" id="title-{{.ID}}" name="title" value="{{.TopicTitle}}" required>
+            </div>
+            <div>
+                <label for="description-{{.ID}}">説明:</label>
+                <input type="text" id="description-{{.ID}}" name="description" value="{{.TopicDescription}}" required>
+            </div>
+            <div>
+                <label for="category-{{.ID}}">カテゴリー:</label>
+                <select id="category-{{.ID}}" name="category" required>
+                    <option value="技術" {{if eq .TopicCategory "技術"}}selected{{end}}>技術</option>
+                    <option value="科学" {{if eq .TopicCategory "科学"}}selected{{end}}>科学</option>
+                    <option value="アート" {{if eq .TopicCategory "アート"}}selected{{end}}>アート</option>
+                    <option value="教育" {{if eq .TopicCategory "教育"}}selected{{end}}>教育</option>
+                    <option value="その他" {{if eq .TopicCategory "その他"}}selected{{end}}>その他</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">更新</button>
+                <button type="button" onclick="toggleEditForm('{{.ID}}')">キャンセル</button>
+            </div>
+        </form>
+        <!-- 削除フォーム -->
+        <form id="delete-form-{{.ID}}" action="/delete_topic" method="post" style="display: none;">
+            <input type="hidden" name="id" value="{{.ID}}">
+        </form>
     </div>
+    {{end}}
     {{end}}
 {{end}}
