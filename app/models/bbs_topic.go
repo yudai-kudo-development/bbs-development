@@ -21,10 +21,11 @@ type BbsTopic struct {
   	TopicTitle       string
   	TopicDescription string
 	TopicCategory    string
-  	BbsUserId        int
+  	BbsUserId           int
 	CreatedAt        time.Time
 	UpdatedAt        time.Time
 	BbsReplies       []BbsReply
+	User             BbsUser `gorm:"foreignKey:BbsUserId"`
 }
 
 func GetRecentTopics () (Topics []BbsTopic, err error) {
@@ -48,7 +49,7 @@ func GetRecentTopics () (Topics []BbsTopic, err error) {
 	return topic,err
 }
 
-func GetIndividualTopic (id int) ([]BbsTopic, error) {
+func GetIndividualTopic (id int) (BbsTopic, error) {
 
 	err = godotenv.Load(".env")
 	if err != nil {
@@ -59,37 +60,11 @@ func GetIndividualTopic (id int) ([]BbsTopic, error) {
 	panic("failed to connect database")
 	}
 
-	var topic []BbsTopic
+	var topic BbsTopic
 	err = Db.Preload("BbsReplies").First(&topic, id).Error
 	fmt.Println(topic)
-	// bbs_topic := `SELECT id, topic_title, topic_description, topic_category, created_at FROM bbs_topics WHERE id = $1`
-	// // err = Db.QueryRow(bbs_topic, id).Scan(&topic.ID, &topic.Topic_title, &topic.Topic_description, &topic.Topic_category)
-	// if err != nil {
-	// 		return topic, err
-	// }
-
-	// // bbs_replies := `SELECT id, bbs_topic_id, reply_name, reply_content, created_at FROM bbs_replies WHERE bbs_topic_id = $1`
-	// // rows, err := Db.Query(bbs_replies, id)
-	// // if err != nil {
-	// // 		return topic, err
-	// // }
-	// // defer rows.Close()
-
-	// // for rows.Next() {
-	// // 		var reply Reply
-	// // 		err := rows.Scan(&reply.ID, &reply.TopicID, &reply.Name, &reply.Content, &reply.CreatedAt)
-	// // 		if err != nil {
-	// // 				return topic, err
-	// // 		}
-	// // 		topic.Replies = append(topic.Replies, reply)
-	// // }
-
-	// // if err := rows.Err(); err != nil {
-	// // 	return topic, err
-	// // }
 
 	return topic, err
-
 }
 
 func PostTopics (w http.ResponseWriter, r *http.Request, user_id int) (err error) {
@@ -153,4 +128,61 @@ func GetTopics (w http.ResponseWriter, r *http.Request) (Topics []BbsTopic, err 
 	query.Find(&topics)
 
 	return topics, err
+}
+
+func UpdateTopic (w http.ResponseWriter, r *http.Request, topic_id int) (err error) {
+	
+	err = godotenv.Load(".env")
+	if err != nil {
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	} 
+	Db, err := gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{})
+	if err != nil {
+	panic("failed to connect database")
+	}
+
+	// TODO:Goで動的SQLを実装する仕組みがあればそちらで実装したい
+	topicID := r.FormValue("id")
+	title := r.FormValue("title")
+	description := r.FormValue("description")
+	category := r.FormValue("category")
+
+	// 更新内容を保持するマップを準備
+	updateData := make(map[string]interface{})
+	if title != "" {
+		updateData["topic_title"] = title
+	}
+	if description != "" {
+		updateData["topic_description"] = description
+	}
+	if category != "" {
+		updateData["topic_category"] = category
+	}
+
+	// 更新処理
+	if len(updateData) > 0 {
+		err = Db.Model(&BbsTopic{}).Where("id = ?", topicID).Updates(updateData).Error
+		if err != nil {
+			fmt.Printf("更新エラー: %v", err)
+		}
+	}
+
+	return err
+}
+
+func DeleteTopic (w http.ResponseWriter, r *http.Request, topic_id int) (err error) {
+	
+	err = godotenv.Load(".env")
+	if err != nil {
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	} 
+	Db, err := gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{})
+	if err != nil {
+	panic("failed to connect database")
+	}
+
+	var topics BbsTopic
+	Db.Where("id = ?", topic_id).Delete(&topics)
+
+	return err
 }

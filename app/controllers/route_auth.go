@@ -10,14 +10,13 @@ import (
 
 func Signup (w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-
 		session, _ := session(r)
 		if &session != nil {
 			User, err := session.GetUserBySession()
 			if err != nil {
 				fmt.Println(err)
 			}
-	
+			
 			data := map[string]interface{}{
 				"Topics": nil,
 				"User": User,
@@ -46,7 +45,6 @@ func Signup (w http.ResponseWriter, r *http.Request) {
 
 func Login (w http.ResponseWriter, r *http.Request) {
 	generateHTML(w, nil, "layout", "login")
-
 }
 
 func Authenticate (w http.ResponseWriter, r *http.Request) {
@@ -69,8 +67,7 @@ func Authenticate (w http.ResponseWriter, r *http.Request) {
 		}
 		http.SetCookie(w, &cookie)
 
-		fmt.Println("認証完了")
-		http.Redirect(w,r, "/mypage", 302)
+		http.Redirect(w,r, "/top", 302)
 	} else {
 		http.Redirect(w,r, "/login", 302)
 	}

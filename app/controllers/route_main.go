@@ -14,31 +14,13 @@ import (
 var Db *sql.DB
 
 func Top (w http.ResponseWriter, r *http.Request) () {
-	
+
 	Topics, err := models.GetRecentTopics()
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	generateHTML(w, Topics, "layout", "top")
-
-	// session, _ := session(r)
-
-	// if &session != nil {
-	// 	User, err := session.GetUserBySession()
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 	}
-
-	// 	data := map[string]interface{}{
-	// 		"Topics": Topics,
-	// 		"User": User,
-	// 	}
-
-	// 	generateHTML(w, data, "layout", "top")
-	// } else {
-	// 	generateHTML(w, Topics, "layout", "top")
-	// }
 }
 
 func GetTopic (w http.ResponseWriter, r *http.Request) () {
@@ -60,34 +42,6 @@ func GetTopic (w http.ResponseWriter, r *http.Request) () {
 	}
 
 	generateHTML(w, Topics, "layout", "individualtopic")
-
-	// Replies, err := models.GetReplies(id)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-
-	// session, _ := session(r)
-
-	// if &session != nil {
-	// 	User, err := session.GetUserBySession()
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 	}
-
-	// 	data := map[string]interface{}{
-	// 		"Topics": Topics,
-	// 		"Replies":Replies,
-	// 		"User": User,
-	// 	}
-
-	// 	generateHTML(w, data, "layout", "individualtopic")
-	// } else {
-	// 	data := map[string]interface{}{
-	// 		"Topics": Topics,
-	// 		"Replies":Replies,
-	// 	}
-	// 	generateHTML(w, data, "layout", "individualtopic")
-	// }
 }
 
 func PostTopic (w http.ResponseWriter, r *http.Request) () {
@@ -189,19 +143,99 @@ func ShowMypage (w http.ResponseWriter, r *http.Request) () {
 			fmt.Println(err)
 		}
 
-		TopicsWithUser, err := models.GetTopicsWithUser(User, User.ID)
+		TopicsWithUser, err := models.GetTopicsWithUser(User.ID)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 
-		data := map[string]interface{}{
-			"Topics": TopicsWithUser,
-			"User": User,
-		}
-
-		generateHTML(w, data, "layout", "mypage")
+		generateHTML(w, TopicsWithUser, "layout", "mypage")
 	} else {
 		http.Redirect(w, r, "/", 302)
+	}
+}
+
+func UpdateTopic (w http.ResponseWriter, r *http.Request) () {
+
+	session, err := session(r)
+	if err != nil {
+		http.Redirect(w,r, "/login", 302)
+	}
+
+	if &session != nil {
+
+		User, err := session.GetUserBySession()
+		if err != nil {
+			fmt.Println(err)
+		}
+
+
+		// お題idから該当のお題・投稿したユーザーを取ってくる
+		topic_id_string := r.FormValue("id")
+
+		topic_id_int, err := strconv.Atoi(topic_id_string)
+		if err != nil {
+			http.Error(w, "Invalid ID", http.StatusBadRequest)
+			return
+		}
+
+		Topics, err := models.GetIndividualTopic(topic_id_int)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		// お題idと該当のお題を投稿したユーザーが合致しているか確認
+		if User.ID == Topics.BbsUserId {
+			// 合致していたらアップデート処理する
+			err := models.UpdateTopic(w,r,topic_id_int)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		http.Redirect(w, r, "/mypage", 302)
+	} else {
+		http.Redirect(w, r, "/mypage", 302)
+	}
+}
+
+func DeleteTopic (w http.ResponseWriter, r *http.Request) () {
+
+	session, err := session(r)
+	if err != nil {
+		http.Redirect(w,r, "/login", 302)
+	}
+
+	if &session != nil {
+
+		User, err := session.GetUserBySession()
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		// お題idから該当のお題・投稿したユーザーを取ってくる
+		topic_id_string := r.FormValue("id")
+
+		topic_id_int, err := strconv.Atoi(topic_id_string)
+		if err != nil {
+			http.Error(w, "Invalid ID", http.StatusBadRequest)
+			return
+		}
+
+		Topics, err := models.GetIndividualTopic(topic_id_int)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		// お題idと該当のお題を投稿したユーザーが合致しているか確認
+		if User.ID == Topics.BbsUserId {
+			// 合致していたらアップデート処理する
+			err := models.DeleteTopic(w,r,topic_id_int)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		http.Redirect(w, r, "/mypage", 302)
+	} else {
+		http.Redirect(w, r, "/mypage", 302)
 	}
 }

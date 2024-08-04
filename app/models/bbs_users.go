@@ -20,6 +20,7 @@ type BbsUser struct {
 	Email     string
 	Password  string
 	CreatedAt time.Time
+	BbsTopics []BbsTopic `gorm:"foreignKey:BbsUserId"`
 }
 
 type Session struct {
@@ -140,38 +141,18 @@ func (sess *Session) GetUserBySession() (user BbsUser, err error) {
 	return user,err
 }
 
-func GetTopicsWithUser (user BbsUser, id int) (Topics []BbsTopic, err error) {
+func GetTopicsWithUser (bbs_user_id int) (users []BbsUser, err error) {
 
-	Db, err := sql.Open("postgres", connStr)
+	err = godotenv.Load(".env")
 	if err != nil {
-		log.Fatal(err)
-	}
-	defer Db.Close()
-
-	topic := BbsTopic{}
-	bbs_topics := `SELECT id, topic_title, topic_description, topic_category, created_at FROM bbs_topics WHERE bbs_user_id = $1`
-	//err = Db.QueryRow(bbs_topics, id).Scan(&topic.ID, &topic.bbs_title, &topic.Description, &topic.Category, &topic.CreatedAt)
-
-	rows, err := Db.Query(bbs_topics, id)
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	} 
+	Db, err := gorm.Open(postgres.Open(os.Getenv("DB_DSN")), &gorm.Config{})
 	if err != nil {
-		log.Fatalln(err)
-	}
-	for rows.Next() {
-
-		err = rows.Scan(
-			&topic.ID,
-			// &topic.bbs_title,
-			// &topic.Description,
-			// &topic.Category,
-		)
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		Topics = append(Topics, topic)
+		panic("failed to connect database")
 	}
 
-	rows.Close()
+    err = Db.Model(&BbsUser{}).Preload("BbsTopics").Where("id = ?", bbs_user_id).Find(&users).Error
 
-	return Topics, err
+	return users, err
 }

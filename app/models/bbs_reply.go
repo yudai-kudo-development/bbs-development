@@ -23,7 +23,7 @@ type BbsReply struct {
     ReplyName    string
     ReplyContent string
     CreatedAt    time.Time
-		UpdatedAt    time.Time
+	UpdatedAt    time.Time
 }
 
 func PostReply (id int , r *http.Request) (err error) {
